@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/alykoshin/gmailer.git"
+    "url": "https://github.com/alykoshin/gmail-send.git"
   },
   "keywords": [
     "gmail",
@@ -28,9 +28,9 @@
   "author": "Alexander Lykoshin <alykoshin@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/alykoshin/gmailer/issues"
+    "url": "https://github.com/alykoshin/gmail-send/issues"
   },
-  "homepage": "https://github.com/alykoshin/gmailer",
+  "homepage": "https://github.com/alykoshin/gmail-send",
   "dependencies": {
     "lodash": "^3.10.1",
     "nodemailer": "^1.5.0"
