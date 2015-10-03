@@ -1,2 +1,5 @@
+# JetBrains specific
+.idea
+
 # passwords
 demo/credentials.json
