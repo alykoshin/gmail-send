@@ -1,0 +1,34 @@
+{
+  "name": "gmailer",
+  "version": "1.0.0",
+  "description": "Minimalistic module to send email using GMail",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "_commit": "git commit -am \"commit by 'npm run commit'\"",
+    "_push": "git push --follow-tags",
+    "commit-and-push": "npm run _commit && npm test && npm run _push",
+    "_patch-release": "npm version patch && npm publish",
+    "_minor-release": "npm version minor && npm publish",
+    "_major-release": "npm version major && npm publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alykoshin/gmailer.git"
+  },
+  "keywords": [
+    "gmail",
+    "gmailer",
+    "email",
+    "smtp"
+  ],
+  "author": "Alexander Lykoshin <alykoshin@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alykoshin/gmailer/issues"
+  },
+  "homepage": "https://github.com/alykoshin/gmailer",
+  "dependencies": {
+    "nodemailer": "^1.5.0"
+  }
+}
