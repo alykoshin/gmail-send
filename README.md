@@ -1,7 +1,7 @@
 # gmail-send
 Minimalistic module to send email using GMail 
 
-Basically it's a wrapper around `nodemailer` package to simplify its usage.
+Basically it's a wrapper around `nodemailer` package to simplify its usage for GMail even more.
 
 Not yet intended for public use.
 
@@ -9,7 +9,6 @@ Not yet intended for public use.
 
 To send emails using GMail you need to add application-specific password to access GMail:
 [My Account](https://myaccount.google.com/) -> [Sign-in & security](https://myaccount.google.com/security) -> [Signing in to Google](https://myaccount.google.com/security#signin) -> [App passwords](https://security.google.com/settings/security/apppasswords?utm_source=OGB&pli=1)
-
 
 Select 'Other (Custom name)' in 'Select app'/'Select device' drop-downs, enter descriptive name for your application and pc and press 'GENERATE'.
 Copy provided password.
