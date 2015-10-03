@@ -13,11 +13,15 @@ npm install --save gmail-send
 
 # Usage
 
+## Configuring application-specific passwords in GMail
+
 To send emails using GMail you need to add application-specific password to access GMail:
 [My Account](https://myaccount.google.com/) -> [Sign-in & security](https://myaccount.google.com/security) -> [Signing in to Google](https://myaccount.google.com/security#signin) -> [App passwords](https://security.google.com/settings/security/apppasswords?utm_source=OGB&pli=1)
 
 Select 'Other (Custom name)' in 'Select app'/'Select device' drop-downs, enter descriptive name for your application and pc and press 'GENERATE'.
 Copy provided password.
+
+## Demo example
 
 ````
 'use strict';
@@ -58,3 +62,7 @@ send({ // Overriding default parameters
 ````
 
 You can find this example in ````./demo/demo.js```` (you'll need to add ````credential.json```` in order to run it)
+
+# Links to package pages:
+[github.com](https://github.com/alykoshin/gmail-send)
+[npmjs.com](https://www.npmjs.com/package/gmail-send)
