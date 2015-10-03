@@ -1,5 +1,5 @@
 {
-  "name": "gmailer",
+  "name": "gmail-send",
   "version": "1.0.0",
   "description": "Minimalistic module to send email using GMail",
   "main": "index.js",
@@ -10,7 +10,10 @@
     "commit-and-push": "npm run _commit && npm test && npm run _push",
     "_patch-release": "npm version patch && npm publish",
     "_minor-release": "npm version minor && npm publish",
-    "_major-release": "npm version major && npm publish"
+    "_major-release": "npm version major && npm publish",
+    "patch-release": "npm test && npm run _patch-release && npm run _push",
+    "minor-release": "npm test && npm run _minor-release && npm run _push",
+    "__major-release": "npm test && npm run _major-release && npm run _push"
   },
   "repository": {
     "type": "git",

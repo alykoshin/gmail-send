@@ -8,7 +8,7 @@ var fs = require('fs');
 var path = require('path');
 var nodemailer = require('nodemailer');
 
-var GMailer = (function(user, pass) {
+var GMailSend = (function(user, pass) {
   var self = this;
 
   var TRANSPORT = {
@@ -67,5 +67,5 @@ var GMailer = (function(user, pass) {
 });
 
 module.exports = function(user, pass) {
-  return new GMailer(user, pass);
+  return new GMailSend(user, pass).send;
 };
