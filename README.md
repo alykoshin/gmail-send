@@ -3,6 +3,8 @@ Minimalistic module to send email using GMail
 
 Basically it's a wrapper around `nodemailer` package to simplify its usage for GMail even more.
 
+If you have different needs regarding the functionality, please add a [feature request](https://github.com/alykoshin/gmail-send/issues).
+
 # Install
 
 ````
@@ -21,32 +23,38 @@ Copy provided password.
 'use strict';
 
 // file credentials.json looks like following:
+//
 // {
 //   "user": "user@gmail.com",
 //   "pass": "abcdefghijklmnop"
 // }
+//
+// You may use credentials.json.example to add you own user/pass and rename to credentials.json
+//
 var credentials = require('./credentials.json');
 
 // Require'ing module and setting default options
 
-var send = require('gmail-send')({  
+var send = require('gmail-send')({
   user: credentials.user,           // Your GMail account used to send emails
   pass: credentials.pass,           // Application-specific password
   to:   credentials.user,           // Send to yourself
   // from:    credentials.user         // from: by default equals to user
   // replyTo: credentials.user         // replyTo: by default undefined
-  subject: 'test subject',          // subject:
-  text:    'test text'              // plain text
+  subject: 'test subject',
+  text:    'test text'
 });
 
-var file = './package.json';
+var file = './demo.js';
 
 // Override any default option and send email
 
 send({ // Overriding default parameters
-  subject: 'attached file',         // new subject:
-  files: [file]                     // file names to attach
+  subject: 'attached file',
+  files: [file]
 }, function (err, res) {
   console.log('send(): err:', err, '; res:', res);
 });
 ````
+
+You can find this example in ````./demo/demo.js```` (you'll need to add ````credential.json```` in order to run it)

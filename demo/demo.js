@@ -2,14 +2,17 @@
  * Created by alykoshin on 04.10.15.
  */
 
-
 'use strict';
 
 // file credentials.json looks like following:
+//
 // {
 //   "user": "user@gmail.com",
 //   "pass": "abcdefghijklmnop"
 // }
+//
+// You may use credentials.json.example to add you own user/pass and rename to credentials.json
+//
 var credentials = require('./credentials.json');
 
 // Require'ing module and setting default options
