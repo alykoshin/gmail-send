@@ -15,13 +15,14 @@ Copy provided password.
 
 ````
 var LOGIN = 'login@gmail.com',   // Your GMail account used to send emails
-  PASSWORD = 'abcdefghijklmnop'; // Application-specific password from previous step
+  PASSWORD = 'abcdefghijklmnop', // Application-specific password from previous step
+  RECIPIENT_EMAIL = 'recipient@gmail.com;
                                                      
 var send = require('gmail-send')(LOGIN, PASSWORD);
 
 var file = './package.json';
 
-send( email, [file], function (err, res) {
+send( RECIPIENT_EMAIL, [file], function (err, res) {
   console.log('send(): err:', err, '; res:', res);
 });
 ````

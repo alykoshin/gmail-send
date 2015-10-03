@@ -32,3 +32,6 @@ npm-debug.log
 
 # JetBrains specific
 .idea
+
+# passwords
+demo/credentials.json

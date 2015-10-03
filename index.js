@@ -4,43 +4,46 @@
 
 'use strict';
 
+var _ = require('lodash');
 var path = require('path');
 var nodemailer = require('nodemailer');
 
-var GMailSend = (function(user, pass) {
+var GMailSend = (function(options) {
   var self = this;
 
-  var TRANSPORT = {
-    service: 'Gmail', auth: { user: user, pass: pass }
-  };
-  var DEFAULT_FROM = user;
-
-  var smtpTransport = nodemailer.createTransport( TRANSPORT );
-
+  self.options = options;
   /**
    *
-   * @param {string} toAddress
-   * @param {string || string[]} fnames
+   * @param {{ user: string, pass: string, files: {string||string[]}, subject: string, text: string }} options
    * @param callback
    */
-  self.send = function(toAddress, fnames, callback) {
+  self.send = function(options, callback) {
     callback = (typeof callback === 'function') ? callback : function() {};
 
-    var from = DEFAULT_FROM + ' ' + '<' + DEFAULT_FROM + '>',
-        to   = /*toName   + ' ' +*/ toAddress,
-        subject = 'test subject',
-        text    = 'test text';
+    options = _.extend({}, self.options, options);
+
+    if (!options.user) { throw 'options.user is mandatory field.'; }
+    if (!options.pass) { throw 'options.pass is mandatory field.'; }
+
+    options.from = options.from || options.user;
+    //options.replyTo = options.replyTo || options.user;
+
+    var TRANSPORT = {
+      service: 'Gmail', auth: { user: options.user, pass: options.pass }
+    };
+
+    var smtpTransport = nodemailer.createTransport( TRANSPORT );
 
     // Preparing attachments
 
-    if (typeof fnames === 'string') { fnames = [fnames]; }
+    if (typeof options.files === 'string') { options.files = [options.files]; }
 
     var attachments = [];
-    for (var i=0; i<fnames.length; i++) {
+    for (var i=0; i<options.files.length; i++) {
       var attachment = {
-        path:     fnames[i],
-        filename: path.basename( fnames[i] ),
-        cid:      path.basename( fnames[i] )
+        path:     options.files[i],
+        filename: path.basename( options.files[i] ),
+        cid:      path.basename( options.files[i] )
       };
       attachments.push(attachment);
     }
@@ -48,25 +51,25 @@ var GMailSend = (function(user, pass) {
     //
 
     var mailOptions = {
-      from:    from,    // sender address
-      to:      to,      // comma separated list of receivers
-      subject: subject, // Subject line
-      text:    text,    // plaintext body
+      from:    options.from + ' ' + '<' + options.from + '>', // sender address
+      to:      options.to,      // comma separated list of receivers
+      replyTo: options.replyTo,      // comma separated list of receivers
+      subject: options.subject, // Subject line
+      text:    options.text,    // plaintext body
       attachments: attachments
     };
-    if (DEFAULT_FROM) { mailOptions.replyTo = DEFAULT_FROM; }
 
-    console.log('mailOptions: ', mailOptions);
+    console.log('gmail-send: send(): mailOptions: ', mailOptions);
 
     // Sending email
 
     smtpTransport.sendMail(mailOptions, function(error, info){
       if (error) {
-        console.log('Error sending message:', error);
+        console.log('gmail-send: send(): Error sending message:', error);
         callback(error);
 
       } else {
-        console.log("Message sent: " + info.response);
+        console.log("gmail-send: send(): Message sent: " + info.response);
         callback(false, info.response);
       }
     });
