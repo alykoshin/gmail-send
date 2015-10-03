@@ -3,7 +3,11 @@ Minimalistic module to send email using GMail
 
 Basically it's a wrapper around `nodemailer` package to simplify its usage for GMail even more.
 
-Not yet intended for public use.
+# Install
+
+````
+npm install --save gmail-send
+````
 
 # Usage
 
@@ -14,15 +18,35 @@ Select 'Other (Custom name)' in 'Select app'/'Select device' drop-downs, enter d
 Copy provided password.
 
 ````
-var LOGIN = 'login@gmail.com',   // Your GMail account used to send emails
-  PASSWORD = 'abcdefghijklmnop', // Application-specific password from previous step
-  RECIPIENT_EMAIL = 'recipient@gmail.com;
-                                                     
-var send = require('gmail-send')(LOGIN, PASSWORD);
+'use strict';
+
+// file credentials.json looks like following:
+// {
+//   "user": "user@gmail.com",
+//   "pass": "abcdefghijklmnop"
+// }
+var credentials = require('./credentials.json');
+
+// Require'ing module and setting default options
+
+var send = require('gmail-send')({  
+  user: credentials.user,           // Your GMail account used to send emails
+  pass: credentials.pass,           // Application-specific password
+  to:   credentials.user,           // Send to yourself
+  // from:    credentials.user         // from: by default equals to user
+  // replyTo: credentials.user         // replyTo: by default undefined
+  subject: 'test subject',          // subject:
+  text:    'test text'              // plain text
+});
 
 var file = './package.json';
 
-send( RECIPIENT_EMAIL, [file], function (err, res) {
+// Override any default option and send email
+
+send({ // Overriding default parameters
+  subject: 'attached file',         // new subject:
+  files: [file]                     // file names to attach
+}, function (err, res) {
   console.log('send(): err:', err, '; res:', res);
 });
 ````
