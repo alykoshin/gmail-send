@@ -23,7 +23,7 @@ Copy provided password.
 
 ## Demo example
 
-````
+````js
 // Require the module and set default options
 var send = require('gmail-send')({
   user: 'user@gmail.com',      // Your GMail account used to send emails
@@ -46,8 +46,8 @@ send({
 });
 ````
 
-You can find the working example in ````./demo/demo.js```` (you'll need to set your user/pass in  ````credential.json.example```` and rename to ````credential.json```` in order to run it)
+You can find the working example in `./demo/demo.js` (you'll need to set your user/pass in  `credential.json.example` and rename to `credential.json` in order to run it)
 
-# Links to package pages:
-[github.com](https://github.com/alykoshin/gmail-send)
-[npmjs.com](https://www.npmjs.com/package/gmail-send)
+____
+**Links to package pages:**
+[github.com](https://github.com/alykoshin/gmail-send) [npmjs.com](https://www.npmjs.com/package/gmail-send)
