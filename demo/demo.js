@@ -29,7 +29,8 @@ var send = require('../index.js')({
   // from:    credentials.user      // from: by default equals to user
   // replyTo: credentials.user      // replyTo: by default undefined
   subject: 'test subject',
-  text:    'test text'
+  text:    'plain text'//,
+  //html:    '<b>html text</b>'
 });
 
 var file = './demo.js';             // File to attach

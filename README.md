@@ -1,7 +1,7 @@
 # gmail-send
 Minimalistic module to send emails using GMail 
 
-Basically it's a wrapper around `nodemailer` package to simplify its usage for GMail even more.
+Basically it's a wrapper around `nodemailer` package to simplify its usage for GMail accounts even more.
 
 If you have different needs regarding the functionality, please add a [feature request](https://github.com/alykoshin/gmail-send/issues).
 
@@ -18,21 +18,24 @@ npm install --save gmail-send
 To be able send emails from Node using GMail you need to add application-specific password to access GMail:
 [My Account](https://myaccount.google.com/) -> [Sign-in & security](https://myaccount.google.com/security) -> [Signing in to Google](https://myaccount.google.com/security#signin) -> [App passwords](https://security.google.com/settings/security/apppasswords?utm_source=OGB&pli=1)
 
-Select 'Other (Custom name)' in 'Select app'/'Select device' drop-downs, enter descriptive name for your application and pc and press 'GENERATE'.
+Select 'Other (Custom name)' in 'Select app'/'Select device' drop-downs, enter descriptive name for your application and device and press 'GENERATE'.
 Copy provided password.
 
 ## Demo example
 
 ````js
 // Require the module and set default options
+// You may use almost any option available in nodemailer, 
+// but if you need fine tuning I'd recommend to consider using nodemailer directly.
 var send = require('gmail-send')({
-  user: 'user@gmail.com',      // Your GMail account used to send emails
-  pass: 'abcdefghijklmnop',    // Application-specific password
-  to:   'user@gmail.com',      // Send to yourself
-  // from:   'user@gmail.com'  // from: by default equals to user
-  // replyTo:'user@gmail.com'  // replyTo: by default undefined
+  user: 'user@gmail.com',               // Your GMail account used to send emails
+  pass: 'abcdefghijklmnop',             // Application-specific password
+  to:   '"User" <user@gmail.com>',      // Send back to yourself
+  // from:   '"User" <user@gmail.com>'  // from: by default equals to user
+  // replyTo:'user@gmail.com'           // replyTo: by default undefined
   subject: 'test subject',
   text:    'test text'
+  // html:    '<b>html text text</b>'
 });
 
 var file = './demo.js';        // File to attach
@@ -40,7 +43,7 @@ var file = './demo.js';        // File to attach
 // Override any default option and send email
 send({                         
   subject: 'attached '+file,   // Override value set as default 
-  files: [file]
+  files: [file]                // String or array of strings of filenames to attach
 }, function (err, res) {
   console.log('send(): err:', err, '; res:', res);
 });

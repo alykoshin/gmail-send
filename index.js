@@ -8,14 +8,41 @@ var _ = require('lodash');
 var path = require('path');
 var nodemailer = require('nodemailer');
 
+/**
+ * sendOptions - options for nodemailer
+ *
+ * @typedef {Object} sendOptions
+ * @property {string} options.user
+ * @property {string} options.pass
+ * @property {(string || string[])} options.files
+ * @property {string} options.from
+ * @property {string} options.to
+ * @property {string} options.replyTo
+ * @property {string} options.text
+ * @property {string} options.html
+ */
+/**
+ * @callback sendCallback
+ * @param {Object} error
+ * @param {string} result
+ */
+/**
+ * @constructor
+ * @param {sendOptions} options  - options for underlying nodemailer
+ * @type {Function}
+ */
 var GMailSend = (function(options) {
   var self = this;
 
+  /** @member {string} */
   self.options = options;
   /**
+   * Send email
+   * You may use almost any option available in nodemailer,
+   * but if you need fine tuning I'd recommend to consider using nodemailer directly.
    *
-   * @param {{ user: string, pass: string, files: {string||string[]}, subject: string, text: string }} options
-   * @param callback
+   * @param {sendOptions} options  - options for underlying nodemailer
+   * @param {sendCallback} callback
    */
   self.send = function(options, callback) {
     callback = (typeof callback === 'function') ? callback : function() {};
@@ -34,43 +61,36 @@ var GMailSend = (function(options) {
 
     var smtpTransport = nodemailer.createTransport( TRANSPORT );
 
-    // Preparing attachments
+    // Preparing nodemailer options (and attachments)
 
     if (typeof options.files === 'string') { options.files = [options.files]; }
 
-    var attachments = [];
+    options.attachments = options.attachments || [];
     for (var i=0; i<options.files.length; i++) {
       var attachment = {
         path:     options.files[i],
         filename: path.basename( options.files[i] ),
         cid:      path.basename( options.files[i] )
       };
-      attachments.push(attachment);
+      options.attachments.push(attachment);
     }
+    delete options.files; // remove files property as incompatible with options of underlying nodemailer
 
-    //
+    options.from = options.from + ' ' + '<' + options.from + '>'; // adjust to nodemailer format
+    options.to   = options.to   + ' ' + '<' + options.to + '>';   // adjust to nodemailer format
 
-    var mailOptions = {
-      from:    options.from + ' ' + '<' + options.from + '>', // sender address
-      to:      options.to,      // comma separated list of receivers
-      replyTo: options.replyTo,      // comma separated list of receivers
-      subject: options.subject, // Subject line
-      text:    options.text,    // plaintext body
-      attachments: attachments
-    };
-
-    console.log('gmail-send: send(): mailOptions: ', mailOptions);
+    console.log('gmail-send: send(): mailOptions: ', options);
 
     // Sending email
 
-    smtpTransport.sendMail(mailOptions, function(error, info){
+    smtpTransport.sendMail(options, function(error, info){
       if (error) {
         console.log('gmail-send: send(): Error sending message:', error);
         callback(error);
 
       } else {
         console.log("gmail-send: send(): Message sent: " + info.response);
-        callback(false, info.response);
+        callback(null, info.response);
       }
     });
   };
