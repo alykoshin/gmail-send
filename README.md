@@ -13,7 +13,7 @@ npm install --save gmail-send
 
 # Usage
 
-## Configuring application-specific passwords in GMail
+## Preparational step: Configure application-specific passwords for your GMail account
 
 To be able send emails using GMail from any application (including Node.js) you need to generate application-specific password to access GMail:
 [My Account](https://myaccount.google.com/) -> [Sign-in & security](https://myaccount.google.com/security) -> [Signing in to Google](https://myaccount.google.com/security#signin) -> [App passwords](https://security.google.com/settings/security/apppasswords?utm_source=OGB&pli=1)
@@ -21,7 +21,7 @@ To be able send emails using GMail from any application (including Node.js) you 
 Select 'Other (Custom name)' in 'Select app'/'Select device' drop-downs, enter descriptive name for your application and device and press 'GENERATE'.
 Copy provided password.
 
-## Demo example
+## Code example
 
 ````js
 // Require the module and set default options
@@ -52,7 +52,7 @@ send({
 You may also set all needed parameters at once and immediately send:
 
 ````js
-require('../index.js')({
+var send = require('gmail-send')({
   user: credentials.user,           // Your GMail account used to send emails
   pass: credentials.pass,           // Application-specific password
   to:   credentials.user,           // Send to yourself
@@ -61,7 +61,7 @@ require('../index.js')({
 })();                               // Send without any check
 ````
 
-You can find the working examples in `./demo/demo.js` (you'll need to set your user/pass in  `credential.json.example` and rename it to `credential.json` in order to run the example). When credentials are set, run the application useing `node demo/demo.js` or
+You can find this working examples in `./demo/demo.js` (you'll need to set your GMail user/pass in  `credential.json.example` and rename it to `credential.json` in order to run the example). When credentials are set, run the application using `node demo/demo.js` or `node demo.js` depending on your current directory.
 
 ____
 **Links to package pages:**
