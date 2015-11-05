@@ -63,6 +63,7 @@ var GMailSend = (function(options) {
 
     // Preparing nodemailer options (and attachments)
 
+    options.files = options.files || [];
     if (typeof options.files === 'string') { options.files = [options.files]; }
 
     options.attachments = options.attachments || [];
@@ -98,6 +99,6 @@ var GMailSend = (function(options) {
   return self;
 });
 
-module.exports = function(user, pass) {
-  return new GMailSend(user, pass).send;
+module.exports = function(options) {
+  return new GMailSend(options).send;
 };

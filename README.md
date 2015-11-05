@@ -15,7 +15,7 @@ npm install --save gmail-send
 
 ## Configuring application-specific passwords in GMail
 
-To be able send emails from Node using GMail you need to add application-specific password to access GMail:
+To be able send emails using GMail from any application (including Node.js) you need to generate application-specific password to access GMail:
 [My Account](https://myaccount.google.com/) -> [Sign-in & security](https://myaccount.google.com/security) -> [Signing in to Google](https://myaccount.google.com/security#signin) -> [App passwords](https://security.google.com/settings/security/apppasswords?utm_source=OGB&pli=1)
 
 Select 'Other (Custom name)' in 'Select app'/'Select device' drop-downs, enter descriptive name for your application and device and press 'GENERATE'.
@@ -49,7 +49,19 @@ send({
 });
 ````
 
-You can find the working example in `./demo/demo.js` (you'll need to set your user/pass in  `credential.json.example` and rename to `credential.json` in order to run it)
+You may also set all needed parameters at once and immediately send:
+
+````js
+require('../index.js')({
+  user: credentials.user,           // Your GMail account used to send emails
+  pass: credentials.pass,           // Application-specific password
+  to:   credentials.user,           // Send to yourself
+  subject: 'ping',
+  text:    'gmail-send example 2'   // Plain text
+})();                               // Send without any check
+````
+
+You can find the working examples in `./demo/demo.js` (you'll need to set your user/pass in  `credential.json.example` and rename it to `credential.json` in order to run the example). When credentials are set, run the application useing `node demo/demo.js` or
 
 ____
 **Links to package pages:**
