@@ -1,7 +1,7 @@
 [![npm version](https://badge.fury.io/js/gmail-send.svg)](http://badge.fury.io/js/gmail-send)
 
-[![Dependency Status](https://david-dm.org/alykoshin/require-dir-all.svg)](https://david-dm.org/alykoshin/gmail-send)
-[![devDependency Status](https://david-dm.org/alykoshin/require-dir-all/dev-status.svg)](https://david-dm.org/alykoshin/gmail-send#info=devDependencies)
+[![Dependency Status](https://david-dm.org/alykoshin/gmail-send/status.svg)](https://david-dm.org/alykoshin/gmail-send#info=dependencies)
+[![devDependency Status](https://david-dm.org/alykoshin/gmail-send/dev-status.svg)](https://david-dm.org/alykoshin/gmail-send#info=devDependencies)
 
 
 gmail-send
