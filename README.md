@@ -1,4 +1,11 @@
-# gmail-send
+[![npm version](https://badge.fury.io/js/gmail-send.svg)](http://badge.fury.io/js/gmail-send)
+
+[![Dependency Status](https://david-dm.org/alykoshin/require-dir-all.svg)](https://david-dm.org/alykoshin/gmail-send)
+[![devDependency Status](https://david-dm.org/alykoshin/require-dir-all/dev-status.svg)](https://david-dm.org/alykoshin/gmail-send#info=devDependencies)
+
+
+gmail-send
+==========
 Minimalistic module to send emails using GMail 
 
 Basically it's a wrapper around `nodemailer` package to simplify its usage for GMail accounts even more.
