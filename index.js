@@ -99,6 +99,14 @@ var GMailSend = (function(options) {
   return self;
 });
 
+//
+
+/**
+ * Exporting function to send email
+ *
+ * @param {sendOptions} options  - options for new GMailSend()
+ * @returns {function}
+ */
 module.exports = function(options) {
   return new GMailSend(options).send;
 };
