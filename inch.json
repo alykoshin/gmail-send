@@ -1,0 +1,10 @@
+{
+  "files": {
+    "included": [
+      "index.js",
+      "app/**"
+    ],
+    "excluded": [
+    ]
+  }
+}

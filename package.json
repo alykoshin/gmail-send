@@ -2,8 +2,20 @@
   "name": "gmail-send",
   "version": "1.2.4",
   "description": "Minimalistic module to send emails using GMail",
-  "main": "index.js",
+  "main": "./index.js",
   "scripts": {
+    "nsp": "nsp check",
+    "_deps-check":    "npm-check-updates --error-level 2",
+
+    "_deps-update":   "echo '* Updating packages versions... '; npm-check-updates -u --upgradeAll --error-level 1 && npm install",
+    "_check-changes": "echo '* Checking if git directory is clean... '; bash -c '[[ -z $(git status -uno --porcelain) ]]'",
+    "update-deps": "npm run _check-changes && npm run _deps-update && git commit -am 'updated deps'",
+
+    "lint": "eslint -f unix .",
+    "inspect": "jsinspect",
+    "pretest": "npm run lint && npm run inspect && npm run nsp && npm run _deps-check",
+
+    "_test": "echo \"Warning: no test specified\" && exit 0",
     "test": "echo \"Warning: no test specified; imitating clean result....\" && exit 0",
     "_commit": "git commit -am \"commit by 'npm run commit'\"",
     "_push": "git push --follow-tags",
@@ -32,7 +44,14 @@
   },
   "homepage": "https://github.com/alykoshin/gmail-send",
   "dependencies": {
-    "lodash": "^3.10.1",
-    "nodemailer": "^1.5.0"
+    "lodash": "^4.0.0",
+    "nodemailer": "^2.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^1.10.3",
+    "jshint": "^2.9.1-rc3",
+    "jsinspect": "^0.7.2",
+    "npm-check-updates": "^2.5.6",
+    "nsp": "^2.2.0"
   }
 }

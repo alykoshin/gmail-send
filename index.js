@@ -36,6 +36,12 @@ var GMailSend = (function(options) {
 
   /** @member {string} */
   self.options = options;
+
+  /** helper to build 'Some Name <some.name@domain.com>' **/
+  function prepareAddress(name, address) {
+    return name + ' ' + '<' + address + '>';
+  }
+
   /**
    * Send email
    * You may use almost any option available in nodemailer,
@@ -49,8 +55,7 @@ var GMailSend = (function(options) {
 
     options = _.extend({}, self.options, options);
 
-    if (!options.user) { throw 'options.user is mandatory field.'; }
-    if (!options.pass) { throw 'options.pass is mandatory field.'; }
+    if (!options.user || !options.pass) { throw 'options.user options.pass are mandatory.'; }
 
     options.from = options.from || options.user;
     //options.replyTo = options.replyTo || options.user;
@@ -77,8 +82,8 @@ var GMailSend = (function(options) {
     }
     delete options.files; // remove files property as incompatible with options of underlying nodemailer
 
-    options.from = options.from + ' ' + '<' + options.from + '>'; // adjust to nodemailer format
-    options.to   = options.to   + ' ' + '<' + options.to + '>';   // adjust to nodemailer format
+    options.from = prepareAddress(options.from, options.from); // adjust to nodemailer format
+    options.to   = prepareAddress(options.to,   options.to);   // adjust to nodemailer format
 
     console.log('gmail-send: send(): mailOptions: ', options);
 

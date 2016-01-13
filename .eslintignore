@@ -1,0 +1,5 @@
+**/node_modules
+coverage
+
+# Exclude templates as they contains syntactically incorrect .js files
+app/templates/**
