@@ -22,7 +22,7 @@ var credentials = require('./credentials.json');
 
 // Example 1
 // =========
-
+console.log('* [example1] sending test email');
 
 // Require'ing module and setting default options
 
@@ -38,7 +38,7 @@ var send = require('../index.js')({
   //html:    '<b>html text</b>'
 });
 
-var file = './demo.js';             // File to attach
+var file = './demo-attachment.txt';             // File to attach
 
 // Override any default option and send email
 
@@ -46,13 +46,13 @@ send({ // Overriding default parameters
   subject: 'attached '+file,        // Override value set as default
   files: [file]
 }, function (err, res) {
-  console.log('send(): err:', err, '; res:', res);
+  console.log('* [example1] send() callback returned: err:', err, '; res:', res);
 });
 
 
 // Example 2
 // =========
-
+console.log('* [example2] sending test email without checking the result');
 
 //var send = require('gmail-send')({
 require('../index.js')({
@@ -61,5 +61,5 @@ require('../index.js')({
   to:   credentials.user,           // Send to yourself
   subject: 'ping',
   text:    'gmail-send example 2'//,// Plain text
-})();                               // Send email without any check
+})({});                               // Send email without any check
 
