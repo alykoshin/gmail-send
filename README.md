@@ -36,7 +36,11 @@ Copy provided password.
 
 ### Code example
 
+#### Example 1
+
 ````js
+console.log('* [example1] sending test email');
+
 // Require the module and set default options
 // You may use almost any option available in nodemailer, 
 // but if you need fine tuning I'd recommend to consider using nodemailer directly.
@@ -51,20 +55,24 @@ var send = require('gmail-send')({
   // html:    '<b>html text text</b>'
 });
 
-var file = './demo.js';        // File to attach
+var file = './demo-attachment.txt';        // File to attach
 
 // Override any default option and send email
 send({                         
   subject: 'attached '+file,   // Override value set as default 
   files: [file]                // String or array of strings of filenames to attach
 }, function (err, res) {
-  console.log('send(): err:', err, '; res:', res);
+  console.log('* [example1] send(): err:', err, '; res:', res);
 });
 ````
+
+#### Example 2
 
 You may also set all needed parameters at once and immediately send:
 
 ````js
+console.log('* [example2] sending test email');
+
 var send = require('gmail-send')({
   user: credentials.user,           // Your GMail account used to send emails
   pass: credentials.pass,           // Application-specific password

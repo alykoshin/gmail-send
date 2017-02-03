@@ -38,12 +38,12 @@ var send = require('../index.js')({
   //html:    '<b>html text</b>'
 });
 
-var file = './demo-attachment.txt';             // File to attach
+var file = './demo-attachment.txt';  // File to attach
 
 // Override any default option and send email
 
 send({ // Overriding default parameters
-  subject: 'attached '+file,        // Override value set as default
+  subject: 'attached '+file,         // Override value set as default
   files: [file]
 }, function (err, res) {
   console.log('* [example1] send() callback returned: err:', err, '; res:', res);
