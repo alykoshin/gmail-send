@@ -85,17 +85,17 @@ var GMailSend = (function(options) {
     options.from = prepareAddress(options.from, options.from); // adjust to nodemailer format
     options.to   = prepareAddress(options.to,   options.to);   // adjust to nodemailer format
 
-    console.log('gmail-send: send(): mailOptions: ', options);
+    //console.log('gmail-send: send(): mailOptions: ', options);
 
     // Sending email
 
     smtpTransport.sendMail(options, function(error, info){
       if (error) {
-        console.log('gmail-send: send(): Error sending message:', error);
+        //console.log('gmail-send: send(): Error sending message:', error);
         callback(error);
 
       } else {
-        console.log("gmail-send: send(): Message sent: " + info.response);
+        //console.log("gmail-send: send(): Message sent: " + info.response);
         callback(null, info.response);
       }
     });
