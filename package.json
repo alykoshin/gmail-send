@@ -42,13 +42,13 @@
   "homepage": "https://github.com/alykoshin/gmail-send",
   "dependencies": {
     "lodash": "^4.17.4",
-    "nodemailer": "^3.0.1"
+    "nodemailer": "^4.0.0"
   },
   "devDependencies": {
-    "eslint": "^3.14.1",
+    "eslint": "^3.19.0",
     "jshint": "^2.9.4",
-    "jsinspect": "^0.8.0",
-    "npm-check-updates": "^2.8.10",
-    "nsp": "^2.6.2"
+    "jsinspect": "^0.12.4",
+    "npm-check-updates": "^2.10.5",
+    "nsp": "^2.6.3"
   }
 }
