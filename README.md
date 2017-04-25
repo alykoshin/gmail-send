@@ -47,7 +47,9 @@ console.log('* [example1] sending test email');
 var send = require('gmail-send')({
   user: 'user@gmail.com',               // Your GMail account used to send emails
   pass: 'abcdefghijklmnop',             // Application-specific password
-  to:   '"User" <user@gmail.com>',      // Send back to yourself
+  to:   'user@gmail.com',               // Send back to yourself; 
+                                        // you also may set array of recipients: 
+                                        // [ 'user1@gmail.com', 'user2@gmail.com' ]
   // from:   '"User" <user@gmail.com>'  // from: by default equals to user
   // replyTo:'user@gmail.com'           // replyTo: by default undefined
   subject: 'test subject',
@@ -77,6 +79,8 @@ var send = require('gmail-send')({
   user: credentials.user,           // Your GMail account used to send emails
   pass: credentials.pass,           // Application-specific password
   to:   credentials.user,           // Send to yourself
+                                    // you also may set array of recipients: 
+                                    // [ 'user1@gmail.com', 'user2@gmail.com' ]
   subject: 'ping',
   text:    'gmail-send example 2'   // Plain text
 })();                               // Send without any check

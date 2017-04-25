@@ -83,7 +83,14 @@ var GMailSend = (function(options) {
     delete options.files; // remove files property as incompatible with options of underlying nodemailer
 
     options.from = prepareAddress(options.from, options.from); // adjust to nodemailer format
-    options.to   = prepareAddress(options.to,   options.to);   // adjust to nodemailer format
+
+    if (typeof options.to === 'string') {
+      options.to = prepareAddress(options.to, options.to);   // adjust to nodemailer format
+
+    } else if (Array.isArray(options.to)) {
+      let to = options.to.map((addr) => prepareAddress(addr, addr));
+      options.to = to.join(',');
+    }
 
     //console.log('gmail-send: send(): mailOptions: ', options);
 
