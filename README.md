@@ -25,7 +25,10 @@ npm install --save gmail-send
 
 ## Usage
 
-### Preparational step: Configure application-specific passwords for your GMail account
+### Preparational step (this step is required only if you are using two-step verrification) 
+
+Configure application-specific passwords for your GMail account
+(if you are not using two-step verification, just skip this step and use same password you are using to login to GMail)
 
 To be able send emails using GMail from any application (including Node.js) you need to generate application-specific password to access GMail:
 [My Account](https://myaccount.google.com/) -> [Sign-in & security](https://myaccount.google.com/security) -> [Signing in to Google](https://myaccount.google.com/security#signin) -> [App passwords](https://security.google.com/settings/security/apppasswords?utm_source=OGB&pli=1)
