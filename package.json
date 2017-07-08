@@ -45,10 +45,10 @@
     "nodemailer": "^4.0.1"
   },
   "devDependencies": {
-    "eslint": "^3.19.0",
-    "jshint": "^2.9.4",
-    "jsinspect": "^0.12.4",
-    "npm-check-updates": "^2.11.0",
+    "eslint": "^4.1.1",
+    "jshint": "^2.9.5",
+    "jsinspect": "^0.12.6",
+    "npm-check-updates": "^2.12.1",
     "nsp": "^2.6.3"
   }
 }
