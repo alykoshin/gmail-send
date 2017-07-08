@@ -19,9 +19,9 @@ If you have different needs regarding the functionality, please add a [feature r
 
 ## Install
 
-````
+```bash
 npm install --save gmail-send
-````
+```
 
 ## Usage
 
@@ -41,53 +41,76 @@ Copy provided password.
 
 #### Example 1
 
-````js
-console.log('* [example1] sending test email');
+```js
+console.log('* [example 1.1] sending test email');
 
-// Require the module and set default options
-// You may use almost any option available in nodemailer, 
-// but if you need fine tuning I'd recommend to consider using nodemailer directly.
+// Require'ing module and setting default options
+
 var send = require('gmail-send')({
-  user: 'user@gmail.com',               // Your GMail account used to send emails
-  pass: 'abcdefghijklmnop',             // Application-specific password
-  to:   'user@gmail.com',               // Send back to yourself; 
-                                        // you also may set array of recipients: 
-                                        // [ 'user1@gmail.com', 'user2@gmail.com' ]
-  // from:   '"User" <user@gmail.com>'  // from: by default equals to user
-  // replyTo:'user@gmail.com'           // replyTo: by default undefined
+//var send = require('../index.js')({
+  user: 'user@gmail.com',
+  // user: credentials.user,                  // Your GMail account used to send emails
+  pass: 'abcdefghijklmnop',
+  // pass: credentials.pass,                  // Application-specific password
+  to:   'user@gmail.com',
+  // to:   credentials.user,                  // Send to yourself
+                                           // you also may set array of recipients:
+                                           // [ 'user1@gmail.com', 'user2@gmail.com' ]
+  // from:    credentials.user             // from: by default equals to user
+  // replyTo: credentials.user             // replyTo: by default undefined
   subject: 'test subject',
-  text:    'test text'
-  // html:    '<b>html text text</b>'
+  text:    'gmail-send example 1',         // Plain text
+  //html:    '<b>html text</b>'            // HTML
 });
 
-var file = './demo-attachment.txt';        // File to attach
 
 // Override any default option and send email
-send({                         
-  subject: 'attached '+file,   // Override value set as default 
-  files: [file]                // String or array of strings of filenames to attach
+
+console.log('* [example 1.1] sending test email');
+
+var filepath = './demo-attachment.txt';  // File to attach
+
+send({ // Overriding default parameters
+  subject: 'attached '+filepath,         // Override value set as default
+  files: [ filepath ],
 }, function (err, res) {
-  console.log('* [example1] send(): err:', err, '; res:', res);
+  console.log('* [example 1.1] send() callback returned: err:', err, '; res:', res);
 });
-````
+
+
+// Set additional file properties
+
+console.log('* [example 1.2] sending test email');
+
+send({ // Overriding default parameters
+  subject: 'attached '+filepath,              // Override value set as default
+  files: [                                    // Array of files to attach
+    {
+      path: filepath,
+      filename: 'filename-can-be-changed.txt' // You can override filename in the attachment if needed
+    }
+  ],
+}, function (err, res) {
+  console.log('* [example 1.2] send() callback returned: err:', err, '; res:', res);
+});
+```
 
 #### Example 2
 
 You may also set all needed parameters at once and immediately send:
 
-````js
-console.log('* [example2] sending test email');
+```js
+console.log('* [example2] sending test email without checking the result');
 
-var send = require('gmail-send')({
+//var send = require('gmail-send')({
+require('../index.js')({
   user: credentials.user,           // Your GMail account used to send emails
   pass: credentials.pass,           // Application-specific password
   to:   credentials.user,           // Send to yourself
-                                    // you also may set array of recipients: 
-                                    // [ 'user1@gmail.com', 'user2@gmail.com' ]
   subject: 'ping',
-  text:    'gmail-send example 2'   // Plain text
-})();                               // Send without any check
-````
+  text:    'gmail-send example 3',  // Plain text
+})({});                             // Send email without any check
+```
 
 You can find this working examples in `./demo/demo.js` (you'll need to set your GMail user/pass in  `credential.json.example` and rename it to `credential.json` in order to run the example). When credentials are set, run the application using `node demo/demo.js` or `node demo.js` depending on your current directory.
 

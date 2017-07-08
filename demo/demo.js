@@ -22,31 +22,56 @@ var credentials = require('./credentials.json');
 
 // Example 1
 // =========
-console.log('* [example1] sending test email');
+console.log('* [example 1.1] sending test email');
 
 // Require'ing module and setting default options
 
 //var send = require('gmail-send')({
 var send = require('../index.js')({
-  user: credentials.user,           // Your GMail account used to send emails
-  pass: credentials.pass,           // Application-specific password
-  to:   credentials.user,           // Send to yourself
-  // from:    credentials.user      // from: by default equals to user
-  // replyTo: credentials.user      // replyTo: by default undefined
+  // user: 'user@gmail.com',
+  user: credentials.user,                  // Your GMail account used to send emails
+  // pass: 'abcdefghijklmnop',
+  pass: credentials.pass,                  // Application-specific password
+  // to:   'user@gmail.com',
+  to:   credentials.user,                  // Send to yourself
+                                           // you also may set array of recipients:
+                                           // [ 'user1@gmail.com', 'user2@gmail.com' ]
+  // from:    credentials.user             // from: by default equals to user
+  // replyTo: credentials.user             // replyTo: by default undefined
   subject: 'test subject',
-  text:    'gmail-send example 1'//,// Plain text
-  //html:    '<b>html text</b>'
+  text:    'gmail-send example 1',         // Plain text
+  //html:    '<b>html text</b>'            // HTML
 });
 
-var file = './demo-attachment.txt';  // File to attach
 
 // Override any default option and send email
 
+console.log('* [example 1.1] sending test email');
+
+var filepath = './demo-attachment.txt';  // File to attach
+
 send({ // Overriding default parameters
-  subject: 'attached '+file,         // Override value set as default
-  files: [file]
+  subject: 'attached '+filepath,         // Override value set as default
+  files: [ filepath ],
 }, function (err, res) {
-  console.log('* [example1] send() callback returned: err:', err, '; res:', res);
+  console.log('* [example 1.1] send() callback returned: err:', err, '; res:', res);
+});
+
+
+// Set additional file properties
+
+console.log('* [example 1.2] sending test email');
+
+send({ // Overriding default parameters
+  subject: 'attached '+filepath,              // Override value set as default
+  files: [                                    // Array of files to attach
+    {
+      path: filepath,
+      filename: 'filename-can-be-changed.txt' // You can override filename in the attachment if needed
+    }
+  ],
+}, function (err, res) {
+  console.log('* [example 1.2] send() callback returned: err:', err, '; res:', res);
 });
 
 
@@ -60,6 +85,6 @@ require('../index.js')({
   pass: credentials.pass,           // Application-specific password
   to:   credentials.user,           // Send to yourself
   subject: 'ping',
-  text:    'gmail-send example 2'//,// Plain text
-})({});                               // Send email without any check
+  text:    'gmail-send example 2',  // Plain text
+})({});                             // Send email without any check
 

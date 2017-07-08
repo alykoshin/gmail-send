@@ -20,6 +20,7 @@ var nodemailer = require('nodemailer');
  * @property {string} options.replyTo
  * @property {string} options.text
  * @property {string} options.html
+ * @property {string} options.attachments - array of `nodemailer`s compatible attachments definitions
  */
 /**
  * @callback sendCallback
@@ -31,7 +32,7 @@ var nodemailer = require('nodemailer');
  * @param {sendOptions} options  - options for underlying nodemailer
  * @type {Function}
  */
-var GMailSend = (function(options) {
+var GMailSend = function(options) {
   var self = this;
 
   /** @member {string} */
@@ -60,6 +61,8 @@ var GMailSend = (function(options) {
     options.from = options.from || options.user;
     //options.replyTo = options.replyTo || options.user;
 
+    // Configure email transport
+
     var TRANSPORT = {
       service: 'Gmail', auth: { user: options.user, pass: options.pass }
     };
@@ -68,21 +71,37 @@ var GMailSend = (function(options) {
 
     // Preparing nodemailer options (and attachments)
 
+    // File attachments
+
     options.files = options.files || [];
-    if (typeof options.files === 'string') { options.files = [options.files]; }
+    if (!Array.isArray(options.files)) options.files = [ options.files ];
+    //if (typeof options.files === 'string') { options.files = [options.files]; }
 
     options.attachments = options.attachments || [];
     for (var i=0; i<options.files.length; i++) {
-      var attachment = {
-        path:     options.files[i],
-        filename: path.basename( options.files[i] ),
-        cid:      path.basename( options.files[i] )
-      };
-      options.attachments.push(attachment);
+      var file = options.files[i];
+      // if string is passed, convert it to `nodemailer` attachment object
+      if (typeof file === 'string') {
+        file = {
+          path:     file,
+          //filename: path.basename( file ),
+          //cid:      path.basename( file ),
+        };
+      }
+      if (!file.path) return callback(new Error('file/filepath to attach must be set'), '');
+      if (file.filename === 'undefined') file.filename = path.basename( file.path );
+      if (file.cid      === 'undefined') file.cid      = file.filename;
+      // we do not validate if options.files[i] is really object and has valid properties
+      // add to options.attachments used by `nodemailer`
+      options.attachments.push( file );
     }
-    delete options.files; // remove files property as incompatible with options of underlying nodemailer
+    delete options.files; // remove files property as incompatible with options of underlying `nodemailer`
+
+    // from
 
     options.from = prepareAddress(options.from, options.from); // adjust to nodemailer format
+
+    // to
 
     if (typeof options.to === 'string') {
       options.to = prepareAddress(options.to, options.to);   // adjust to nodemailer format
@@ -92,11 +111,10 @@ var GMailSend = (function(options) {
       options.to = to.join(',');
     }
 
-    //console.log('gmail-send: send(): mailOptions: ', options);
-
     // Sending email
 
-    smtpTransport.sendMail(options, function(error, info){
+    //console.log('gmail-send: send(): mailOptions: ', options);
+    smtpTransport.sendMail(options, function(error, info) {
       if (error) {
         //console.log('gmail-send: send(): Error sending message:', error);
         callback(error);
@@ -109,7 +127,7 @@ var GMailSend = (function(options) {
   };
 
   return self;
-});
+};
 
 //
 
