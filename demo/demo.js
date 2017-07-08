@@ -39,7 +39,7 @@ var send = require('../index.js')({
   // from:    credentials.user             // from: by default equals to user
   // replyTo: credentials.user             // replyTo: by default undefined
   subject: 'test subject',
-  text:    'gmail-send example 1',         // Plain text
+  text:    'gmail-send examples 1.1 & 1,2',// Plain text
   //html:    '<b>html text</b>'            // HTML
 });
 
