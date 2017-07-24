@@ -99,7 +99,7 @@ var GMailSend = function(options) {
 
     // from
 
-    options.from = prepareAddress(options.from, options.from); // adjust to nodemailer format
+    options.from = prepareAddress(options.from, options.user); // adjust to nodemailer format
 
     // to
 
