@@ -7,6 +7,8 @@
 [![Dependency Status](https://david-dm.org/alykoshin/gmail-send/status.svg)](https://david-dm.org/alykoshin/gmail-send#info=dependencies)
 [![devDependency Status](https://david-dm.org/alykoshin/gmail-send/dev-status.svg)](https://david-dm.org/alykoshin/gmail-send#info=devDependencies)
 
+[![Known Vulnerabilities](https://snyk.io/test/github/alykoshin/gmail-send/badge.svg)](https://snyk.io/test/github/alykoshin/gmail-send)
+
 
 # gmail-send
 
