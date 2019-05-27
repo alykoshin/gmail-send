@@ -27,8 +27,15 @@ npm install --save gmail-send
 
 ## Usage
 
-### Preparational step (this step is required only if you are using two-step verrification) 
+### Preparational step 
+### This step is required only if you are using single-factor authentication
+It is necessary to open access to an account for less secure apps.
+To do this follow these steps:
+[My Account](https://myaccount.google.com/) -> [Sign-in & security](https://myaccount.google.com/security) -> [Less secure app access] -> [Turn on acces](https://myaccount.google.com/u/1/lesssecureapps)
 
+If you don't see this setting, your administrator might have turned off less secure app account access. 
+
+### This step is required only if you are using two-step verrification
 Configure application-specific passwords for your GMail account
 (if you are not using two-step verification, just skip this step and use same password you are using to login to GMail)
 
