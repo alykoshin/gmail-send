@@ -47,11 +47,11 @@
   },
   "homepage": "https://github.com/alykoshin/gmail-send",
   "dependencies": {
-    "lodash": "^4.17.11",
-    "nodemailer": "^6.2.1"
+    "lodash": "^4.17.15",
+    "nodemailer": "^6.3.0"
   },
   "devDependencies": {
-    "eslint": "^5.16.0",
+    "eslint": "^6.1.0",
     "jshint": "^2.10.2",
     "jsinspect": "^0.12.7",
     "nsp": "^3.2.1"
