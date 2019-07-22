@@ -54,8 +54,8 @@ var filepath = './demo-attachment.txt';  // File to attach
 send({ // Overriding default parameters
   subject: 'attached '+filepath,         // Override value set as default
   files: [ filepath ],
-}, function (err, res) {
-  console.log('* [example 1.1] send() callback returned: err:', err, '; res:', res);
+}, function (err, res, full) {
+  console.log('* [example 1.1] send() callback returned: err:', err, '; res:', res, '; full:', full);
 });
 
 
@@ -71,8 +71,8 @@ send({ // Overriding default parameters
       filename: 'filename-can-be-changed.txt' // You can override filename in the attachment if needed
     }
   ],
-}, function (err, res) {
-  console.log('* [example 1.2] send() callback returned: err:', err, '; res:', res);
+}, function (err, res, full) {
+  console.log('* [example 1.2] send() callback returned: err:', err, '; res:', res, '; full:', full);
 });
 
 

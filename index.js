@@ -121,7 +121,7 @@ var GMailSend = function(options) {
 
       } else {
         //console.log("gmail-send: send(): Message sent: " + info.response);
-        callback(null, info.response);
+        callback(null, info.response, info);
       }
     });
   };
