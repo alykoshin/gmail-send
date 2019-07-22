@@ -4,9 +4,9 @@
 
 'use strict';
 
-var _ = require('lodash');
-var path = require('path');
-var nodemailer = require('nodemailer');
+const _ = require('lodash');
+const path = require('path');
+const nodemailer = require('nodemailer');
 
 /**
  * sendOptions - options for nodemailer
@@ -26,14 +26,15 @@ var nodemailer = require('nodemailer');
  * @callback sendCallback
  * @param {Object} error
  * @param {string} result
+ * @param {Object} fullResult
  */
 /**
  * @constructor
  * @param {sendOptions} options  - options for underlying nodemailer
  * @type {Function}
  */
-var GMailSend = function(options) {
-  var self = this;
+const GMailSend = function(options) {
+  const self = this;
 
   /** @member {string} */
   self.options = options;
@@ -45,86 +46,115 @@ var GMailSend = function(options) {
 
   /**
    * Send email
-   * You may use almost any option available in nodemailer,
-   * but if you need fine tuning I'd recommend to consider using nodemailer directly.
+   * 
+   * You may use almost any option available in Nodemailer,
+   * but if you need fine tuning I'd recommend to consider using Nodemailer directly.
    *
-   * @param {sendOptions} options  - options for underlying nodemailer
+   * @param {sendOptions}  options  - options for underlying nodemailer
    * @param {sendCallback} callback
+   * @return Promise({{ result: string, full: object }})
    */
   self.send = function(options, callback) {
     callback = (typeof callback === 'function') ? callback : function() {};
-
     options = _.extend({}, self.options, options);
+    if (!options.user || !options.pass) { throw new Error('options.user options.pass are mandatory.'); }
 
-    if (!options.user || !options.pass) { throw 'options.user options.pass are mandatory.'; }
+    return new Promise((resolve, reject) => {
 
-    options.from = options.from || options.user;
-    //options.replyTo = options.replyTo || options.user;
-
-    // Configure email transport
-
-    var TRANSPORT = {
-      service: 'Gmail', auth: { user: options.user, pass: options.pass }
-    };
-
-    var smtpTransport = nodemailer.createTransport( TRANSPORT );
-
-    // Preparing nodemailer options (and attachments)
-
-    // File attachments
-
-    options.files = options.files || [];
-    if (!Array.isArray(options.files)) options.files = [ options.files ];
-    //if (typeof options.files === 'string') { options.files = [options.files]; }
-
-    options.attachments = options.attachments || [];
-    for (var i=0; i<options.files.length; i++) {
-      var file = options.files[i];
-      // if string is passed, convert it to `nodemailer` attachment object
-      if (typeof file === 'string') {
-        file = {
-          path:     file,
-          //filename: path.basename( file ),
-          //cid:      path.basename( file ),
+      const handleSuccess = (info) => {
+        if (callback) callback(null, info.response, info);
+        const result = {
+          result: info && info.response,
+          full:   info,
         };
+        return resolve(result);
+      };
+
+      const handleError = (error) => {
+        if (typeof error === 'string') error = new Error(error);
+        if (callback) callback(error, error.message, undefined);
+        return reject(error);
+      };
+
+      options.from = options.from || options.user;
+      //options.replyTo = options.replyTo || options.user;
+
+      // Configure email transport
+
+      const TRANSPORT = {
+        service: 'Gmail', auth: { user: options.user, pass: options.pass }
+      };
+
+      const smtpTransport = nodemailer.createTransport( TRANSPORT );
+
+      // Preparing nodemailer options (and attachments)
+
+      // File attachments
+
+      options.files = options.files || [];
+      if (!Array.isArray(options.files)) options.files = [ options.files ];
+      //if (typeof options.files === 'string') { options.files = [options.files]; }
+
+      options.attachments = options.attachments || [];
+      for (let i=0; i<options.files.length; i++) {
+        let file = options.files[i];
+        // if string is passed, convert it to `nodemailer` attachment object
+        if (typeof file === 'string') {
+          file = {
+            path:     file,
+            //filename: path.basename( file ),
+            //cid:      path.basename( file ),
+          };
+        }
+        if (!file.path) {
+          //const msg = 'file/filepath to attach must be set';
+          //if (callback) callback(new Error(msg), msg, undefined);
+          //return reject()
+          return handleError('file/filepath to attach must be set');
+        }
+        if (file.filename === 'undefined') file.filename = path.basename( file.path );
+        if (file.cid      === 'undefined') file.cid      = file.filename;
+        // we do not validate if options.files[i] is really object and has valid properties
+        // add to options.attachments used by `nodemailer`
+        options.attachments.push( file );
       }
-      if (!file.path) return callback(new Error('file/filepath to attach must be set'), '');
-      if (file.filename === 'undefined') file.filename = path.basename( file.path );
-      if (file.cid      === 'undefined') file.cid      = file.filename;
-      // we do not validate if options.files[i] is really object and has valid properties
-      // add to options.attachments used by `nodemailer`
-      options.attachments.push( file );
-    }
-    delete options.files; // remove files property as incompatible with options of underlying `nodemailer`
+      delete options.files; // remove files property as incompatible with options of underlying `nodemailer`
 
-    // from
+      // from
 
-    options.from = prepareAddress(options.from, options.from); // adjust to nodemailer format
+      options.from = prepareAddress(options.from, options.from); // adjust to nodemailer format
 
-    // to
+      // to
 
-    if (typeof options.to === 'string') {
-      options.to = prepareAddress(options.to, options.to);   // adjust to nodemailer format
+      if (typeof options.to === 'string') {
+        options.to = prepareAddress(options.to, options.to);   // adjust to nodemailer format
 
-    } else if (Array.isArray(options.to)) {
-      let to = options.to.map((addr) => prepareAddress(addr, addr));
-      options.to = to.join(',');
-    }
-
-    // Sending email
-
-    //console.log('gmail-send: send(): mailOptions: ', options);
-    smtpTransport.sendMail(options, function(error, info) {
-      if (error) {
-        //console.log('gmail-send: send(): Error sending message:', error);
-        callback(error);
-
-      } else {
-        //console.log("gmail-send: send(): Message sent: " + info.response);
-        callback(null, info.response, info);
+      } else if (Array.isArray(options.to)) {
+        let to = options.to.map((addr) => prepareAddress(addr, addr));
+        options.to = to.join(',');
       }
-    });
-  };
+
+      // Sending email
+
+      //console.log('gmail-send: send(): mailOptions: ', options);
+      return smtpTransport.sendMail(options, function(error, info) {
+        if (error) {
+          //console.log('gmail-send: send(): Error sending message:', error);
+          //if (callback) callback(error);
+          //return reject(error);
+          return handleError(error);
+
+        } else {
+          //console.log("gmail-send: send(): Message sent: " + info.response);
+          //if (callback) callback(null, info.response, info);
+          //return resolve(info.response, info);
+          return handleSuccess(info);
+        }
+      }); // smtpTransport.sendMail()
+
+    }); // return new Promise()
+
+  }; // self.send = function()
 
   return self;
 };

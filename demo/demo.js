@@ -55,7 +55,10 @@ send({ // Overriding default parameters
   subject: 'attached '+filepath,         // Override value set as default
   files: [ filepath ],
 }, function (err, res, full) {
-  console.log('* [example 1.1] send() callback returned: err:', err, '; res:', res, '; full:', full);
+  if (err) return console.log('* [example 1.1] send() callback returned: err:', err);
+  console.log('* [example 1.1] send() callback returned: res:', res);
+  // uncomment to see full response from Nodemailer:
+  // console.log('* [example 1.1] send() callback returned: full:', full);
 });
 
 
@@ -72,7 +75,10 @@ send({ // Overriding default parameters
     }
   ],
 }, function (err, res, full) {
-  console.log('* [example 1.2] send() callback returned: err:', err, '; res:', res, '; full:', full);
+  if (err) return console.log('* [example 1.2] send() callback returned: err:', err);
+  console.log('* [example 1.2] send() callback returned: res:', res);
+  // uncomment to see full response from Nodemailer:
+  // console.log('* [example 1.2] send() callback returned: full:', full);
 });
 
 

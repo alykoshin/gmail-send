@@ -12,7 +12,7 @@
 
 # gmail-send
 
-Minimalistic module to send emails using GMail 
+Minimalistic module to send emails using GMail (supports `Promise`)
 
 Basically it's a wrapper around `nodemailer` package to simplify its usage for GMail accounts even more.
 
@@ -93,10 +93,19 @@ send({ // Overriding default parameters
   subject: 'attached '+filepath,         // Override value set as default
   files: [ filepath ],
 }, function (err, res, full) {
-  console.log('* [example 1.1] send() callback returned: err:', err, '; res:', res, '; full:', full);
+  if (err) return console.log('* [example 1.1] send() callback returned: err:', err);
+  console.log('* [example 1.1] send() callback returned: res:', res);
+  // uncomment to see full response from Nodemailer:
+  // console.log('* [example 1.2] send() callback returned: full:', full);
 });
-//
-// * [example 1.1] send() callback returned: err: null ; res: 250 2.0.0 OK  
+```
+String result:
+```
+* [example 1.1] sending test email
+```
+
+Full response (if uncommented):
+```
 //   1234567890 1234567890abcde.67 - gsmtp ; full: {
 //   accepted: [ 'user@gmail.com' ],
 //   rejected: [],
@@ -107,10 +116,9 @@ send({ // Overriding default parameters
 //   envelope: { from: 'user@gmail.com', to: [ 'user@gmail.com' ] },
 //   messageId: '<12345678-1234-1234-1234-12345678901@gmail.com>'
 // }
-//
+```
 
-
-
+```js
 // Set additional file properties
 
 console.log('* [example 1.2] sending test email');
@@ -124,23 +132,30 @@ send({ // Overriding default parameters
     }
   ],
 }, function (err, res, full) {
-  console.log('* [example 1.2] send() callback returned: err:', err, '; res:', res, '; full:', full);
+  if (err) return console.log('* [example 1.2] send() callback returned: err:', err);
+  console.log('* [example 1.2] send() callback returned: res:', res);
+  // uncomment to see full response from Nodemailer:
+  // console.log('* [example 1.2] send() callback returned: full:', full);
 });
-//
-// * [example 1.2] sending test email
-// * [example 1.2] send() callback returned: err: null ; res: 250 2.0.0 OK  1234567890 1234567890abcde.67 - gsmtp ; full: {
-//       accepted: [ 'user@gmail.com' ],
-//       rejected: [],
-//       envelopeTime: 239,
-//       messageTime: 885,
-//       messageSize: 694,
-//       response: '250 2.0.0 OK  1234567890 1234567890abcde.67 - gsmtp',
-//       envelope: { from: 'user@gmail.com', to: [ 'user@gmail.com' ] },
-//       messageId: '<12345678-1234-1234-1234-12345678901
-//  @gmail.com>'
-//     }
-//
-// 
+```
+String result:
+```
+* [example 1.2] sending test email
+```
+
+Full response (if uncommented):
+```
+* [example 1.2] send() callback returned: err: null ; res: 250 2.0.0 OK  1234567890 1234567890abcde.67 - gsmtp ; full: {
+      accepted: [ 'user@gmail.com' ],
+      rejected: [],
+      envelopeTime: 239,
+      messageTime: 885,
+      messageSize: 694,
+      response: '250 2.0.0 OK  1234567890 1234567890abcde.67 - gsmtp',
+      envelope: { from: 'user@gmail.com', to: [ 'user@gmail.com' ] },
+      messageId: '<12345678-1234-1234-1234-12345678901
+ @gmail.com>'
+    }
 ```
 
 #### Example 2
@@ -164,6 +179,70 @@ require('../index.js')({
 ```
 
 You can find this working examples in `./demo/demo.js` (you'll need to set your GMail user/pass in  `credential.json.example` and rename it to `credential.json` in order to run the example). When credentials are set, run the application using `node demo/demo.js` or `node demo.js` depending on your current directory.
+
+
+#### Example 3 - Promise
+
+Instead of plain string response, Promise returns object:
+```js
+{ 
+  result: "string result", // same as full.response
+  full:   { ... },         // full response from Nodemailer
+}
+```
+
+```js
+// Promise Example 1
+// =========
+console.log('* [promise-example-1] configuring');
+
+// Require'ing module and setting default options
+
+//var send = require('gmail-send')({
+var send = require('../index.js')({
+  user: credentials.user,
+  pass: credentials.pass,
+  to:   credentials.user,
+  subject: 'test subject',
+  text:    'gmail-send promise examples',
+});
+
+
+// Send email
+
+console.log('* [promise-example-1] sending');
+
+const result = send() // Using default parameters
+  .then((res) => {
+    console.log('* [promise-example-1] then: res.result:', res.result);
+    // full response from Nodemailer:
+    // console.log('* [promise-example-1] then: res.full:', res.full);
+  })
+  .catch((error) => {
+    console.log('ERROR:', error);
+    console.log('* [promise-example-1] catch: error:', error);
+  })
+;
+
+
+console.log('* [promise-example-2] sending');
+
+const asyncAwaitSend = async() => {
+  try {
+    const res = await send(); // Using default parameters
+    console.log('* [promise-example-2] res.result:', res.result);
+    // uncomment to see full response from Nodemailer:
+    // console.log('* [promise-example-2] res.full:', res.full);
+  } catch (e) {
+    console.error('* [promise-example-2] ERROR:', e);
+  }
+};
+
+
+asyncAwaitSend();
+```
+
+
 
 ## Troubleshooting
 
