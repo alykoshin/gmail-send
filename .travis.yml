@@ -1,11 +1,11 @@
 language: node_js
 node_js:
-  - "6.0"
-  - "7.0"
-  - "stable"
+  - "8"
+  - "9"
+  - "10"
   - "node"
-before_install:
-script: "npm run-script test-travis"
-# Send coverage data to Coveralls
-before_script:
-after_script: "npm run-script coverall"
+  - "stable"
+before_install: "npm run-script travis-before-install"
+script: "npm run-script travis-script"
+before_script: "npm run-script travis-before-script"
+after_script: "npm run-script travis-after-script"
