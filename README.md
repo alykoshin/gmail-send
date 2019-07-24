@@ -40,9 +40,6 @@ Its configuration depends on whether are you using two-step authentication or no
 
 In this case it is required to allow access to an account for "**less secure apps**".
 
-To do this follow these steps:
-[My Account](https://myaccount.google.com/) -> [Sign-in & security](https://myaccount.google.com/security) -> Click on [Turn on access](https://myaccount.google.com/u/1/lesssecureapps) ->
-
 Detailed step-by-step actions with sreenshots are described [here](./doc/configure-less-secure.md)
 
 

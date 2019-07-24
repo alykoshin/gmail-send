@@ -1,3 +1,5 @@
+### Preparation step - Configure your GMail account  
+
 #### Case 1: Your account is NOT configured to use two-step verification
 
 In this case it is required to allow access to an account for "**less secure apps**".
