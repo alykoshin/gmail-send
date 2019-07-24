@@ -44,7 +44,8 @@ const send = require('../index.js')({
 
   subject: 'test subject',
   text:    'gmail-send example 1',         // Plain text
-  //html:    '<b>html text</b>'            // HTML
+  // html:    '<b>html text</b>'           // HTML
+  // files: [ filepath ],                  // Set filenames to attach (if you need to set attachment filename in email, see example below
 });
 
 
@@ -57,8 +58,8 @@ console.log('* [example 1.1] sending test email');
 // Override any default option and send email
 
 send({ // Overriding default parameters
-  subject: 'attached '+filepath,         // Override value set as default
-  files: [ filepath ],
+  subject: 'attached '+filepath,   // Override value set as default
+  files: [ filepath ],             // Set filenames to attach
 }, function (err, res, full) {
   if (err) return console.log('* [example 1.1] send() callback returned: err:', err);
   console.log('* [example 1.1] send() callback returned: res:', res);
@@ -97,6 +98,7 @@ send({ // Overriding default parameters
     {
       path: filepath,
       filename: 'filename-can-be-changed.txt' // You can override filename in the attachment if needed
+                                              // this value will be set as attachment filename in email
     }
   ],
 }, function (err, res, full) {

@@ -118,6 +118,12 @@ const send = require('gmail-send')(options);
   - `subject` - optional - subject line
   - `text`    - optional - Plain text content
   - `html`    - optional - HTML content
+  - `files`   - optional - array of files to attach
+    - if particular filename is of `string` type, it is the fielpath to attach
+    - you may also set it to object `{ path, filename }`:
+      - `path`     - is the filepath to attach
+      - `filename` - this value will be set as attachment filename in email
+  ],
   
 You may set also any option provided by `nodemailer` and it will be passed further, for eample:  
   - bcc - optional - this option is not defined in `gmail-send`  ndwill be passed to `nodemailer` without changes
