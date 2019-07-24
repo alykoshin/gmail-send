@@ -39,8 +39,8 @@ const send = require('../index.js')({
   // from:    credentials.user,            // from: by default equals to user
   // replyTo: credentials.user,            // replyTo: by default `undefined`
 
-  // re:  'some-user@mail.com',            // almost any option of `nodemailer` will be passed to it
-  // bcc: 'some-user@mail.com',            // including re: and bcc: (but no any processing will be done on them)
+  // bcc: 'some-user@mail.com',            // almost any option of `nodemailer` will be passed to it
+  //                                       // (but no any processing will be done on them)
 
   subject: 'test subject',
   text:    'gmail-send example 1',         // Plain text
@@ -63,7 +63,7 @@ send({ // Overriding default parameters
   if (err) return console.log('* [example 1.1] send() callback returned: err:', err);
   console.log('* [example 1.1] send() callback returned: res:', res);
   // uncomment to see full response from Nodemailer:
-  // console.log('* [example 1.2] send() callback returned: full:', full);
+  // console.log('* [example 1.1] send() callback returned: full:', full);
 });
 //
 // //  String result:

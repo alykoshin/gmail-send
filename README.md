@@ -107,7 +107,21 @@ If the callback is not provided, `send` function will return `Promise`.
 const send = require('gmail-send')(options);
 ```
 
-- `options` - optional - an object
+- `options`   - mandatory - an object with following basic properties: 
+  - `user`    - mandatory
+  - `pass`    - mandatory
+  - `to`      - mandatory - address as `string` or array of `string` addresses
+                          you also may set array of recipients:
+                          [ 'user1@gmail.com', 'user2@gmail.com ]
+  - `from`    - optional  - by default equals to `user`
+  - `replyTo` - optional - by default `undefined`
+  - `subject` - optional - subject line
+  - `text`    - optional - Plain text content
+  - `html`    - optional - HTML content
+  
+You may set also any option provided by `nodemailer` and it will be passed further, for eample:  
+  - bcc - optional - this option is not defined in `gmail-send`  ndwill be passed to `nodemailer` without changes
+
  
 ##### 2.1. Usage with callback
 
@@ -172,8 +186,8 @@ const send = require('gmail-send')({
   // from:    credentials.user,            // from: by default equals to user
   // replyTo: credentials.user,            // replyTo: by default `undefined`
   
-  // re:  'some-user@mail.com',            // almost any option of `nodemailer` will be passed to it
-  // bcc: 'some-user@mail.com',            // including re: and bcc: (but no any processing will be done on them)
+  // bcc: 'some-user@mail.com',            // almost any option of `nodemailer` will be passed to it
+  //                                       // (but no any processing will be done on them)
   
   subject: 'test subject',
   text:    'gmail-send example 1',         // Plain text
