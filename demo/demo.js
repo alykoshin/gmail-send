@@ -34,8 +34,8 @@ const send = require('../index.js')({
    pass: credentials.pass,               // Application-specific password
   //to:   'user@gmail.com',
    to:   credentials.user,               // Send to yourself
-  // you also may set array of recipients:
-  // [ 'user1@gmail.com', 'user2@gmail.com' ]
+  //                                       // you also may set array of recipients:
+  //                                       // [ 'user1@gmail.com', 'user2@gmail.com' ]
   // from:    credentials.user,            // from: by default equals to user
   // replyTo: credentials.user,            // replyTo: by default `undefined`
 

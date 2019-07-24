@@ -119,14 +119,14 @@ const send = require('gmail-send')(options);
   - `text`    - optional - Plain text content
   - `html`    - optional - HTML content
   - `files`   - optional - array of files to attach
-    - if particular filename is of `string` type, it is the fielpath to attach
-    - you may also set it to object `{ path, filename }`:
+    - if particular filename in array is of `string` type, it is the filepath to attach
+    - if it is an object `{ path, filename }` then:
       - `path`     - is the filepath to attach
       - `filename` - this value will be set as attachment filename in email
   ],
   
-You may set also any option provided by `nodemailer` and it will be passed further, for eample:  
-  - bcc - optional - this option is not defined in `gmail-send`  ndwill be passed to `nodemailer` without changes
+You may set also any option provided by `nodemailer` and it will be passed further, for example:  
+  - bcc - optional - this option is not defined in `gmail-send` and will be passed to `nodemailer` unchanged
 
  
 ##### 2.1. Usage with callback
@@ -187,8 +187,8 @@ const send = require('gmail-send')({
   // pass: credentials.pass,               // Application-specific password
   to:   'user@gmail.com',
   // to:   credentials.user,               // Send to yourself
-                                           // you also may set array of recipients:
-                                           // [ 'user1@gmail.com', 'user2@gmail.com' ]
+  //                                       // you also may set array of recipients:
+  //                                       // [ 'user1@gmail.com', 'user2@gmail.com' ]
   // from:    credentials.user,            // from: by default equals to user
   // replyTo: credentials.user,            // replyTo: by default `undefined`
   
@@ -198,6 +198,7 @@ const send = require('gmail-send')({
   subject: 'test subject',
   text:    'gmail-send example 1',         // Plain text
   //html:    '<b>html text</b>'            // HTML
+  // files: [ filepath ],                  // Set filenames to attach (if you need to set attachment filename in email, see example below
 });
 
 
