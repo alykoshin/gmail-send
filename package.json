@@ -1,6 +1,6 @@
 {
   "name": "gmail-send",
-  "version": "1.8.1",
+  "version": "1.8.2",
   "description": "Minimalistic module to send emails using GMail",
   "main": "./index.js",
   "scripts": {
