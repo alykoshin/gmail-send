@@ -17,20 +17,21 @@
 //
 // You may use credentials.json.example to add you own user/pass and rename to credentials.json
 //
-var credentials = require('./credentials.json');
+const credentials = require('./credentials.json');
 
 
+//
 // Promise Example 1
-// =========
+// =================
 console.log('* [promise-example-1] configuring');
 
 // Require'ing module and setting default options
 
-//var send = require('gmail-send')({
-var send = require('../index.js')({
-  user: credentials.user,
-  pass: credentials.pass,
-  to:   credentials.user,
+//const send = require('gmail-send')({
+const send = require('../index.js')({
+  user:    credentials.user,
+  pass:    credentials.pass,
+  to:      credentials.user,
   subject: 'test subject',
   text:    'gmail-send promise examples',
 });
@@ -43,7 +44,7 @@ console.log('* [promise-example-1] sending');
 const result = send() // Using default parameters
   .then((res) => {
     console.log('* [promise-example-1] then: res.result:', res.result);
-    // uncomment to see full response from Nodemailer:
+    // full response from Nodemailer:
     // console.log('* [promise-example-1] then: res.full:', res.full);
   })
   .catch((error) => {
@@ -60,13 +61,11 @@ const asyncAwaitSend = async() => {
     const res = await send(); // Using default parameters
     console.log('* [promise-example-2] res.result:', res.result);
     // uncomment to see full response from Nodemailer:
-    // console.log('* [promise-example-2] res.full:',   res.full);
+    // console.log('* [promise-example-2] res.full:', res.full);
   } catch (e) {
     console.error('* [promise-example-2] ERROR:', e);
   }
 };
-
-
 asyncAwaitSend();
 
 

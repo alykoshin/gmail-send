@@ -17,39 +17,44 @@
 //
 // You may use credentials.json.example to add you own user/pass and rename to credentials.json
 //
-var credentials = require('./credentials.json');
+const credentials = require('./credentials.json');
 
 
 // Example 1
 // =========
-console.log('* [example 1.1] sending test email');
+console.log('* [example 1]');
 
 // Require'ing module and setting default options
 
-//var send = require('gmail-send')({
-var send = require('../index.js')({
-  // user: 'user@gmail.com',
-  user: credentials.user,                  // Your GMail account used to send emails
-  // pass: 'abcdefghijklmnop',
-  pass: credentials.pass,                  // Application-specific password
-  // to:   'user@gmail.com',
-  to:   credentials.user,                  // Send to yourself
-                                           // you also may set array of recipients:
-                                           // [ 'user1@gmail.com', 'user2@gmail.com' ]
-  // from:    credentials.user             // from: by default equals to user
-  // replyTo: credentials.user             // replyTo: by default undefined
-  // bcc: 'some-user@mail.com',            // almost any option of `nodemailer` will be passed to it
+//const send = require('gmail-send')({
+const send = require('../index.js')({
+  //user: 'user@gmail.com',
+   user: credentials.user,               // Your GMail account used to send emails
+  //pass: 'abcdefghijklmnop',
+   pass: credentials.pass,               // Application-specific password
+  //to:   'user@gmail.com',
+   to:   credentials.user,               // Send to yourself
+  // you also may set array of recipients:
+  // [ 'user1@gmail.com', 'user2@gmail.com' ]
+  // from:    credentials.user,            // from: by default equals to user
+  // replyTo: credentials.user,            // replyTo: by default `undefined`
+
+  // re:  'some-user@mail.com',            // almost any option of `nodemailer` will be passed to it
+  // bcc: 'some-user@mail.com',            // including re: and bcc: (but no any processing will be done on them)
+
   subject: 'test subject',
-  text:    'gmail-send examples 1.1 & 1,2',// Plain text
+  text:    'gmail-send example 1',         // Plain text
   //html:    '<b>html text</b>'            // HTML
 });
 
 
-// Override any default option and send email
+const filepath = './demo-attachment.txt';  // File to attach
+
+
 
 console.log('* [example 1.1] sending test email');
 
-var filepath = './demo-attachment.txt';  // File to attach
+// Override any default option and send email
 
 send({ // Overriding default parameters
   subject: 'attached '+filepath,         // Override value set as default
@@ -58,13 +63,33 @@ send({ // Overriding default parameters
   if (err) return console.log('* [example 1.1] send() callback returned: err:', err);
   console.log('* [example 1.1] send() callback returned: res:', res);
   // uncomment to see full response from Nodemailer:
-  // console.log('* [example 1.1] send() callback returned: full:', full);
+  // console.log('* [example 1.2] send() callback returned: full:', full);
 });
+//
+// //  String result:
+//
+// * [example 1.1] sending test email
+//
+//
+// // Full response (if uncommented):
+//
+// * [example 1.21] send() callback returned: err: null ; res: 250 2.0.0 OK  1234567890 1234567890abcde.67 - gsmtp ; full: {
+//   1234567890 1234567890abcde.67 - gsmtp ; full: {
+//   accepted: [ 'user@gmail.com' ],
+//   rejected: [],
+//   envelopeTime: 252,
+//   messageTime: 1386,
+//   messageSize: 678,
+//   response: '250 2.0.0 OK  1234567890 1234567890abcde.67 - gsmtp',
+//   envelope: { from: 'user@gmail.com', to: [ 'user@gmail.com' ] },
+//   messageId: '<12345678-1234-1234-1234-12345678901@gmail.com>'
+// }
 
 
-// Set additional file properties
 
 console.log('* [example 1.2] sending test email');
+
+// Set additional file properties
 
 send({ // Overriding default parameters
   subject: 'attached '+filepath,              // Override value set as default
@@ -80,10 +105,29 @@ send({ // Overriding default parameters
   // uncomment to see full response from Nodemailer:
   // console.log('* [example 1.2] send() callback returned: full:', full);
 });
+//
+// // String result:
+//
+// * [example 1.2] sending test email
+//
+//
+// // Full response (if uncommented):
+//`
+// * [example 1.2] send() callback returned: err: null ; res: 250 2.0.0 OK  1234567890 1234567890abcde.67 - gsmtp ; full: {
+//       accepted: [ 'user@gmail.com' ],
+//       rejected: [],
+//       envelopeTime: 239,
+//       messageTime: 885,
+//       messageSize: 694,
+//       response: '250 2.0.0 OK  1234567890 1234567890abcde.67 - gsmtp',
+//       envelope: { from: 'user@gmail.com', to: [ 'user@gmail.com' ] },
+//       messageId: '<12345678-1234-1234-1234-12345678901@gmail.com>'
+//     }
 
 
-// Example 2
-// =========
+////////////////////////////////////////////////////////////////////////////////
+
+
 console.log('* [example2] sending test email without checking the result');
 
 //var send = require('gmail-send')({
@@ -92,6 +136,15 @@ require('../index.js')({
   pass: credentials.pass,           // Application-specific password
   to:   credentials.user,           // Send to yourself
   subject: 'ping',
-  text:    'gmail-send example 2',  // Plain text
-})({});                             // Send email without any check
+  text:    'gmail-send example 3',  // Plain text
+})(()=>{});                         // Send email without any check
+                                    //
+                                    // Either callback function MUST be provided
+                                    // or Promise rejection must be handled (see below)
+//
+// * [example2] sending test email without checking the result
+//
+
+
+////////////////////////////////////////////////////////////////////////////////
 

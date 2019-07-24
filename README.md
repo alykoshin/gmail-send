@@ -19,19 +19,22 @@ Basically it's a wrapper around `nodemailer` package to simplify its usage for G
 If you have different needs regarding the functionality, please add a [feature request](https://github.com/alykoshin/gmail-send/issues).
 
 
-## Install
+
+# Install
 
 ```bash
 npm install --save gmail-send
 ```
 
-## Usage
+
+# Prerequisites
 
 ### Preparation step - Configure your GMail account  
 
-In order to send emails using GMail you need to configure your account properly.
+In order to send emails using GMail you need your account to be configured properly.
 
 Its configuration depends on whether are you using two-step authentication or not.
+
 
 #### Case 1: Your account is NOT configured to use two-step verification
 
@@ -55,6 +58,7 @@ If you don't see this setting, your administrator might have turned off less sec
 You may find more info on "Less secure apps" here: https://support.google.com/accounts/answer/6010255, but basically this is how Google names all the apps using traditional SMTP/POP3 protocols when 2-step verification is disabled.
 
 
+
 #### Case 2: Your account is configured to use two-step verification
 
 Configure application-specific passwords for your GMail account
@@ -67,39 +71,123 @@ Select 'Other (Custom name)' in 'Select app'/'Select device' drop-downs, enter d
 Copy provided password.
 
 
-### Code example
 
-#### Example 1
+# Quick start
+
+1) Initialization: require the module and set defaults
 
 ```js
-console.log('* [example 1.1] sending test email');
+const send = require('gmail-send')({
+  user: 'user@gmail.com',
+  pass: 'abcdefghijklmnop',
+  to:   'user@gmail.com',
+  subject: 'test subject',
+});
+```
+
+Now use it (callback way):
+```js
+send({
+  text:    'gmail-send example 1',  
+}, (error, result, fullResult) => {
+  if (error) console.error(error);
+  console.log(result);
+})
+```
+
+If the callback is not provided, `send` function will return `Promise`.
+
+
+
+# Usage
+
+#### 1. Initializaton
+
+```js
+const send = require('gmail-send')(options);
+```
+
+- `options` - optional - an object
+ 
+##### 2.1. Usage with callback
+
+```js
+send(options, callback);
+```
+- `options`  - optional
+- `callback` - optional 
+  `callback` takes 3 parameters:
+   - error   - error object or `null`
+   - result  - string response returned by Nodemailer (same as `full.response`)
+   - full    - full result returned by Nodemailer
+
+##### 2.2. Usage with `Promise`
+
+If `callback` is not provided, `send` will return `Promise` which 
+- resolves into `{ result, full }` object with properties same as in callback
+- or rejects with error object. 
+
+
+##### 2.2.1 `then`/`catch`
+
+```js
+send(options)
+  .then(({ result, full }) => console.log(result))
+  .catch((error) => console.error('ERROR', error))
+  ;
+```
+
+##### 2.2.2. `async`/`await`
+
+```js
+try {
+  const {result,full} = await send(options);
+  console.log(result);
+} catch(error) {
+  console.error('ERROR', error);
+}
+```
+
+
+
+# More examples
+
+#### Example 1 - Callback way
+
+```js
+console.log('* [example 1]');
 
 // Require'ing module and setting default options
 
-var send = require('gmail-send')({
-//var send = require('../index.js')({
+const send = require('gmail-send')({
+//const send = require('../index.js')({
   user: 'user@gmail.com',
-  // user: credentials.user,                  // Your GMail account used to send emails
+  // user: credentials.user,               // Your GMail account used to send emails
   pass: 'abcdefghijklmnop',
-  // pass: credentials.pass,                  // Application-specific password
+  // pass: credentials.pass,               // Application-specific password
   to:   'user@gmail.com',
-  // to:   credentials.user,                  // Send to yourself
+  // to:   credentials.user,               // Send to yourself
                                            // you also may set array of recipients:
                                            // [ 'user1@gmail.com', 'user2@gmail.com' ]
   // from:    credentials.user,            // from: by default equals to user
-  // replyTo: credentials.user,            // replyTo: by default undefined
-  // bcc: 'some-user@mail.com',            // almost any option of `nodemailer` will be passed to it
+  // replyTo: credentials.user,            // replyTo: by default `undefined`
+  
+  // re:  'some-user@mail.com',            // almost any option of `nodemailer` will be passed to it
+  // bcc: 'some-user@mail.com',            // including re: and bcc: (but no any processing will be done on them)
+  
   subject: 'test subject',
   text:    'gmail-send example 1',         // Plain text
   //html:    '<b>html text</b>'            // HTML
 });
 
 
-// Override any default option and send email
+const filepath = './demo-attachment.txt';  // File to attach
+
+
 
 console.log('* [example 1.1] sending test email');
 
-var filepath = './demo-attachment.txt';  // File to attach
+// Override any default option and send email
 
 send({ // Overriding default parameters
   subject: 'attached '+filepath,         // Override value set as default
@@ -110,14 +198,15 @@ send({ // Overriding default parameters
   // uncomment to see full response from Nodemailer:
   // console.log('* [example 1.2] send() callback returned: full:', full);
 });
-```
-String result:
-```
-* [example 1.1] sending test email
-```
-
-Full response (if uncommented):
-```
+//
+// //  String result:
+//
+// * [example 1.1] sending test email
+//
+//
+// // Full response (if uncommented):
+//
+// * [example 1.21] send() callback returned: err: null ; res: 250 2.0.0 OK  1234567890 1234567890abcde.67 - gsmtp ; full: {
 //   1234567890 1234567890abcde.67 - gsmtp ; full: {
 //   accepted: [ 'user@gmail.com' ],
 //   rejected: [],
@@ -128,12 +217,12 @@ Full response (if uncommented):
 //   envelope: { from: 'user@gmail.com', to: [ 'user@gmail.com' ] },
 //   messageId: '<12345678-1234-1234-1234-12345678901@gmail.com>'
 // }
-```
 
-```js
-// Set additional file properties
+
 
 console.log('* [example 1.2] sending test email');
+
+// Set additional file properties
 
 send({ // Overriding default parameters
   subject: 'attached '+filepath,              // Override value set as default
@@ -149,25 +238,24 @@ send({ // Overriding default parameters
   // uncomment to see full response from Nodemailer:
   // console.log('* [example 1.2] send() callback returned: full:', full);
 });
-```
-String result:
-```
-* [example 1.2] sending test email
-```
-
-Full response (if uncommented):
-```
-* [example 1.2] send() callback returned: err: null ; res: 250 2.0.0 OK  1234567890 1234567890abcde.67 - gsmtp ; full: {
-      accepted: [ 'user@gmail.com' ],
-      rejected: [],
-      envelopeTime: 239,
-      messageTime: 885,
-      messageSize: 694,
-      response: '250 2.0.0 OK  1234567890 1234567890abcde.67 - gsmtp',
-      envelope: { from: 'user@gmail.com', to: [ 'user@gmail.com' ] },
-      messageId: '<12345678-1234-1234-1234-12345678901
- @gmail.com>'
-    }
+//
+// // String result:
+//
+// * [example 1.2] sending test email
+//
+//
+// // Full response (if uncommented):
+//`
+// * [example 1.2] send() callback returned: err: null ; res: 250 2.0.0 OK  1234567890 1234567890abcde.67 - gsmtp ; full: {
+//       accepted: [ 'user@gmail.com' ],
+//       rejected: [],
+//       envelopeTime: 239,
+//       messageTime: 885,
+//       messageSize: 694,
+//       response: '250 2.0.0 OK  1234567890 1234567890abcde.67 - gsmtp',
+//       envelope: { from: 'user@gmail.com', to: [ 'user@gmail.com' ] },
+//       messageId: '<12345678-1234-1234-1234-12345678901@gmail.com>'
+//     }
 ```
 
 #### Example 2
@@ -184,18 +272,26 @@ require('../index.js')({
   to:   credentials.user,           // Send to yourself
   subject: 'ping',
   text:    'gmail-send example 3',  // Plain text
-})({});                             // Send email without any check
+})(()=>{});                         // Send email without any check
+                                    //
+                                    // Either callback function MUST be provided
+                                    // or Promise rejection must be handled (see below)
 //
 // * [example2] sending test email without checking the result
 //
 ```
 
-You can find this working examples in `./demo/demo.js` (you'll need to set your GMail user/pass in  `credential.json.example` and rename it to `credential.json` in order to run the example). When credentials are set, run the application using `node demo/demo.js` or `node demo.js` depending on your current directory.
+You can find these working examples in `./demo/demo.js`.
+
+You'll need to set your GMail user/pass in  `credential.json.example` and rename it to `credential.json` in order to run the example). sWhen credentials are set, run the application using `node demo/demo.js` or `node demo.js` depending on your current directory.
 
 
-#### Example 3 - Promise
 
-Instead of plain string response, Promise returns object:
+#### Example 3 - Promise way
+
+If callback function is not provided, `send` function returns Promise. 
+  
+Instead of plain string response, Promise resolves to following object:
 ```js
 { 
   result: "string result", // same as full.response
@@ -204,17 +300,18 @@ Instead of plain string response, Promise returns object:
 ```
 
 ```js
+//
 // Promise Example 1
-// =========
+// =================
 console.log('* [promise-example-1] configuring');
 
 // Require'ing module and setting default options
 
 //var send = require('gmail-send')({
 var send = require('../index.js')({
-  user: credentials.user,
-  pass: credentials.pass,
-  to:   credentials.user,
+  user:    credentials.user,
+  pass:    credentials.pass,
+  to:      credentials.user,
   subject: 'test subject',
   text:    'gmail-send promise examples',
 });
@@ -249,14 +346,12 @@ const asyncAwaitSend = async() => {
     console.error('* [promise-example-2] ERROR:', e);
   }
 };
-
-
 asyncAwaitSend();
 ```
 
 
 
-## Troubleshooting
+# Troubleshooting
 
 #### 1. Critical security alert message to your linked account 
 
@@ -264,11 +359,11 @@ If you receive message with the subject "**Critical security alert for your link
 " to your email account linked to the one you are trying to use:
 ![sign-in-attempt-was-blocked](doc/images/sign-in-attempt-was-blocked.jpeg)
 
-You may go to the link 'Check activity', check information to ensure it was yours attepmt and confirm it by clicking on 'Yes, it was me' button.
+You may click 'Check activity', check information to ensure it was yours attepmt and confirm it by clicking on 'Yes, it was me' button.
 
 ![a-suspicious-app](doc/images/a-suspicious-app.jpeg)
 
-But if you are not using two-step verification even after this you still need to enable access for less-secure app (see preparation steps above).
+But if you are not using two-step verification even now you still need to enable access for less-secure app (see preparation steps above).
 
 ![less-secure](doc/images/less-secure-app-warning.jpeg)
 
@@ -289,7 +384,9 @@ submitOrder: assistant email: user@gmail.com
   command: 'AUTH PLAIN'
 }
 ```
-In this case (as suggested by the link provided in this response) you need to check your username/password and ensure you allowed less secure application access if you are not using two-steps verification. 
+In this case (as suggested by the [link provided in this response](https://support.google.com/mail/?p=BadCredentials)) you need to: 
+1) check your username/password 
+2) ensure you allowed less secure application access if you are not using two-steps verification. 
 
 
 ## Credits
