@@ -1,10 +1,46 @@
 //const npsUtils = require('nps-utils');
 const {series, concurrent, rimraf} = require('nps-utils');
 
+const handleResult = (prefix, successMsg, errorMsg, failOnError) =>
+  `rc=$?;` +
+  `if [ $rc -eq 0 ]; ` +
+  ` then ( echo "\n* SUCCESS: ${prefix} ${successMsg}\n"; exit 0; ) ` +
+  ` else ( echo "\n* ERROR: ${prefix} ${errorMsg}\n"; exit ${ failOnError ? 1 : 0 }; ) ` +
+  `fi `;
+
+
 module.exports = {
   scripts: {
-    audit: 'npm audit || echo \'\n*** Please check warnings above ***\n\' && npm audit --production --audit-level high && echo \'\n*** npm audit reported no high-level vulnerabilities for production configuration ***\n\' ',
-
+    ttt: 'eee || echo 1 && echo 2',
+    audit: {
+      default: concurrent.nps( 'audit.all', 'audit.prod' ),
+      all:
+               'echo "* Checking dev/prod packages for any vulnerabilities...";' +
+                 'npm audit;' +
+                 handleResult(
+                   'for dev/prod configuration npm audit reported',
+                   'no vulnerabilities',
+                   'some vulnerabilities. Please check messages above.',
+                   false,
+                 ),
+      //'rc=$?; if [ $rc -eq 0 ]; ' +
+      // '  then ( echo "\n* SUCCESS: npm audit reported no vulnerabilities in dev/prod configuration\n"; exit 0; )' +
+      //'  else ( echo "\n* WARNING: npm audit reported some vulnerabilities in dev/prod configuration. Please check messages above\n"; exit 0; ) ' +
+      //'fi ',
+      prod:
+               'echo "* Checking prod packages for high-level vulnerabilities...";' +
+                 'npm audit --production --audit-level high ; ' +
+        handleResult(
+          'for prod configuration npm audit reported',
+          'no high-level vulnerabilities',
+          'high-level vulnerabilities',
+          true,
+        ),
+                 //'rc=$?; if [ $rc -eq 0 ]; ' +
+                 //' then ( echo "\n* SUCCESS: npm audit reported no high-level vulnerabilities in prod configuration\n"; exit 0; )' +
+                 //' else ( echo "\n* ERROR: npm audit reported high-level vulnerabilities in prod configuration\n"; exit 1; ) ' +
+                 //'fi ',
+    },
     deps: {
       update:     'echo \'* Updating packages versions... \';' +
                     ' npm-check-updates -u --upgradeAll --error-level 1 &&' +
@@ -18,33 +54,60 @@ module.exports = {
     checkChanges: 'echo \'* Checking if git directory is clean... \'; ' +
                     'bash -c \'' +
                     '  [[ -z $(git status -uno --porcelain) ]]; ' +
-                    '  rc=$?; ' +
-                    '  if [ $rc -eq 0 ]; ' +
-                    '    then echo "* git directory is clean"; exit $rc; ' +
-                    '    else echo "* git directory is not clean"; exit $rc; ' +
-                    '  fi ' +
+                    //'  rc=$?; if [ $rc -eq 0 ]; ' +
+                    //'    then echo "* SUCCESS: git directory is clean"; exit $rc; ' +
+                    //'    else echo "* ERROR: git directory is not clean"; exit $rc; ' +
+                    //'  fi ' +
+                    handleResult(
+                      'git directory',
+                      'is clean',
+                      'is not clean',
+                      true,
+                    ) +
                     '\' ',
 
     test: {
       //default: npsUtils.concurrent.nps(
       //  'test.pretest'
       //),
-      default:   series.nps(
-        'test.pretest',
+      default: series.nps(
+        'test.pre',
         'test.disabled',
+        //'test.post',
       ),
-      lint:      'eslint -f unix .',
-      inspect:   'jsinspect --ignore \'coverage|test\'',
-      //pretest: "nps test.lint && nps test.inspect && nps audit && npm run _deps-check",
-      pretest:   concurrent.nps(
-        'test.lint',
-        'test.inspect',
-        'audit',
-        'deps.check',
-      ),
-      coveralls: 'cat ./coverage/coverage.lcov | ./node_modules/coveralls/bin/coveralls.js',
+
+
+      pre: {
+        lint:    'eslint -f unix .',
+        inspect: 'jsinspect --ignore \'coverage|test\'',
+
+        //pretest: "nps test.lint && nps test.inspect && nps audit && npm run _deps-check",
+        default: concurrent.nps(
+          'test.pre.lint',
+          'test.pre.inspect',
+          'audit',
+          'deps.check',
+        ),
+      },
+
       //test: "echo \"Warning: no test specified; imitating clean result...\" && exit 0",
-      disabled:  'echo "Warning: no test specified; imitating clean result...." && exit 0',
+      disabled: {
+        default: 'nps test.disabled.warn',
+        warn:    'echo "* WARNING: no test specified; imitating clean result..." && exit 0',
+        error:   'echo "* ERROR: no test specified; imitating clean result..."   && exit 1',
+      },
+
+      run: {
+        mocha:     'nyc ./node_modules/mocha/bin/_mocha -- -R spec ./test/**/*',
+        report:    'nyc report --reporter=html && nyc report --reporter=text-lcov > coverage/coverage.lcov',
+        coveralls: 'cat ./coverage/coverage.lcov | ./node_modules/coveralls/bin/coveralls.js',
+        default:   series.nps( 'test.run.test', 'test.run.report', 'test.run.coveralls'),
+      },
+
+      //post: {
+      //default: series.nps(
+      //),
+      //},
     },
 
     git: {
@@ -58,22 +121,33 @@ module.exports = {
       private: 'npm publish --access private',
     },
 
-    "_patch-release": series(
-      "npm version patch",
-      "git commit --allow-empty -am 'npm version patch'",
-      "nps publish.private",
-    ),
-    "_minor-release": "npm version minor && " +
-                        "git commit -am 'npm version minor' " +
-                        "&& npm run _publish",
-    "_major-release": "npm version major && " +
-                        "git commit -am 'npm version major' && " +
-                        "npm run _publish",
+    //"_patch-release": series(
+    //  "npm version patch",
+    //  "git commit --allow-empty -am 'npm version patch'",
+    //  "nps publish.public",
+    //),
+    //"_minor-release": series(
+    //  "npm version minor",
+    //  "git commit -am 'npm version minor' ",
+    //  "nps publish.public",
+    //),
+    //"_major-release": series(
+    //  "npm version major",
+    //  "git commit -am 'npm version major'",
+    //  "nps publish.public",
+    //),
 
-    patchRelease: series.nps('test', '_patch-release', 'git.push',),
-    minorRelease: series.nps('test', '_minor-release', 'git.push',),
-    majorRelease: series.nps('test', '_major-release', 'git.push',),
+    release: {
+      version: series(
+        "npm version $2",
+        "git commit -am 'npm version $2'",
+        "nps publish.public",
+      ),
 
+      patch: series.nps('test', 'release.version patch', 'git.push',),
+      minor: series.nps('test', 'release.version minor', 'git.push',),
+      major: series.nps('test', 'release.version major', 'git.push',),
+    },
 
     // https://docs.travis-ci.com/user/job-lifecycle/
     travis:             {
