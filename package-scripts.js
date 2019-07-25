@@ -51,20 +51,6 @@ module.exports = {
                     ' --packageFile package.json', // fix for https://github.com/tjunnone/npm-check-updates/issues/136#issuecomment-155721102
     },
 
-    checkChanges: 'echo \'* Checking if git directory is clean... \'; ' +
-                    'bash -c \'' +
-                    '  [[ -z $(git status -uno --porcelain) ]]; ' +
-                    //'  rc=$?; if [ $rc -eq 0 ]; ' +
-                    //'    then echo "* SUCCESS: git directory is clean"; exit $rc; ' +
-                    //'    else echo "* ERROR: git directory is not clean"; exit $rc; ' +
-                    //'  fi ' +
-                    handleResult(
-                      'git directory',
-                      'is clean',
-                      'is not clean',
-                      true,
-                    ) +
-                    '\' ',
 
     test: {
       //default: npsUtils.concurrent.nps(
@@ -114,6 +100,20 @@ module.exports = {
       commit:        'git commit -am "commit by \'git.commit\'"',
       push:          'git push --follow-tags',
       commitAndPush: 'nps git.commit && nps test && nps git.push"',
+      checkClean:     'echo \'* Checking if git directory is clean... \'; ' +
+                        'bash -c \'' +
+                        '  [[ -z $(git status -uno --porcelain) ]]; ' +
+                        //'  rc=$?; if [ $rc -eq 0 ]; ' +
+                        //'    then echo "* SUCCESS: git directory is clean"; exit $rc; ' +
+                        //'    else echo "* ERROR: git directory is not clean"; exit $rc; ' +
+                        //'  fi ' +
+                        handleResult(
+                          'git directory',
+                          'is clean',
+                          'is not clean',
+                          true,
+                        ) +
+                        '\' ',
     },
 
     publish: {
