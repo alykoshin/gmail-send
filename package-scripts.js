@@ -121,32 +121,43 @@ module.exports = {
       private: 'npm publish --access private',
     },
 
-    //"_patch-release": series(
-    //  "npm version patch",
-    //  "git commit --allow-empty -am 'npm version patch'",
-    //  "nps publish.public",
-    //),
-    //"_minor-release": series(
-    //  "npm version minor",
-    //  "git commit -am 'npm version minor' ",
-    //  "nps publish.public",
-    //),
-    //"_major-release": series(
-    //  "npm version major",
-    //  "git commit -am 'npm version major'",
-    //  "nps publish.public",
-    //),
-
     release: {
-      version: series(
-        "npm version $2",
-        "git commit -am 'npm version $2'",
-        "nps publish.public",
-      ),
+      //version: series(
+      //  'echo "release.version: start"',
+      //  "echo [$0 $1 $2 $3]",
+      //  //(...args) => { console.log('args:', args); return "echo OK"; },
+      //  //"npm version $0",
+      //  //"git commit -am 'npm version $0'",
+      //  //"nps publish.public",
+      //),
+      version: {
+        "patch": series(
+          "npm version patch",
+          "git commit --allow-empty -am 'npm version patch'",
+          "nps publish.public",
+        ),
+        "minor": series(
+          "npm version minor",
+          "git commit --allow-empty -am 'npm version minor' ",
+          "nps publish.public",
+        ),
+        "major": series(
+          "npm version major",
+          "git commit --allow-empty -am 'npm version major'",
+          "nps publish.public",
+        ),
+      },
 
-      patch: series.nps('test', 'release.version patch', 'git.push',),
-      minor: series.nps('test', 'release.version minor', 'git.push',),
-      major: series.nps('test', 'release.version major', 'git.push',),
+      xxx: 'rr=',
+      //xxx: (...args) => { console.log('args:', args); return "dummy"; },
+      //patch: series.nps('test', '"release.version patch"', 'git.push',),
+      //ttt: series('nps test', 'nps "release.xxx patch"', 'nps git.push',),
+      //ttt: 'nps test && nps "release.xxx patch" && nps git.push',
+      //ttt: 'nps "release.xxx patch"',
+
+      patch: series.nps('test', 'release.version.patch', 'git.push',),
+      minor: series.nps('test', 'release.version.minor', 'git.push',),
+      major: series.nps('test', 'release.version.major', 'git.push',),
     },
 
     // https://docs.travis-ci.com/user/job-lifecycle/
@@ -163,6 +174,7 @@ module.exports = {
       //after_deploy: '',
       after_script:  'nps test.coveralls'
     },
+    dummy: 'echo "dummy"',
   },
   options: {
     silent:   false,
