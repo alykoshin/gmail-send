@@ -5,7 +5,9 @@
   "main": "./index.js",
   "scripts": {
     "start": "nps",
-    "test": "nps test"
+    "test": "nps test",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -25,7 +27,8 @@
   "homepage": "https://github.com/alykoshin/gmail-send",
   "dependencies": {
     "lodash": "^4.17.15",
-    "nodemailer": "^6.3.0"
+    "nodemailer": "^6.3.0",
+    "snyk": "^1.316.1"
   },
   "devDependencies": {
     "eslint": "^6.1.0",
@@ -33,5 +36,6 @@
     "jsinspect": "^0.12.7",
     "nps": "^5.9.5",
     "nps-utils": "^1.7.0"
-  }
+  },
+  "snyk": true
 }
