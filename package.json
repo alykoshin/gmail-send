@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/alykoshin/gmail-send",
   "dependencies": {
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.17",
     "nodemailer": "^6.3.0"
   },
   "devDependencies": {
