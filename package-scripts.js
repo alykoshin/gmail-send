@@ -1,19 +1,19 @@
 //const npsUtils = require('nps-utils');
-const {series, concurrent, rimraf} = require('nps-utils');
+const { series, concurrent, rimraf } = require('nps-utils');
 
 const handleResult = (prefix, successMsg, errorMsg, failOnError) =>
   `rc=$?;` +
   `if [ $rc -eq 0 ]; ` +
   ` then ( echo "\n* SUCCESS: ${prefix} ${successMsg}\n"; exit 0; ) ` +
-  ` else ( echo "\n* ERROR: ${prefix} ${errorMsg}\n"; exit ${ failOnError ? 1 : 0 }; ) ` +
+  ` else ( echo "\n* ERROR: ${prefix} ${errorMsg}\n"; exit ${failOnError ? 1 : 0}; ) ` +
   `fi `;
 
 
 module.exports = {
   scripts: {
-    ttt: 'eee || echo 1 && echo 2',
+    ttt:   'eee || echo 1 && echo 2',
     audit: {
-      default: concurrent.nps( 'audit.all', 'audit.prod' ),
+      default: concurrent.nps('audit.all', 'audit.prod'),
       all:
                'echo "* Checking dev/prod packages for any vulnerabilities...";' +
                  'npm audit;' +
@@ -25,30 +25,31 @@ module.exports = {
                  ),
       //'rc=$?; if [ $rc -eq 0 ]; ' +
       // '  then ( echo "\n* SUCCESS: npm audit reported no vulnerabilities in dev/prod configuration\n"; exit 0; )' +
-      //'  else ( echo "\n* WARNING: npm audit reported some vulnerabilities in dev/prod configuration. Please check messages above\n"; exit 0; ) ' +
-      //'fi ',
+      //'  else ( echo "\n* WARNING: npm audit reported some vulnerabilities in dev/prod configuration. Please check
+      // messages above\n"; exit 0; ) ' + 'fi ',
       prod:
-               'echo "* Checking prod packages for high-level vulnerabilities...";' +
-                 'npm audit --production --audit-level high ; ' +
+        'echo "* Checking prod packages for high-level vulnerabilities...";' +
+        'npm audit --production --audit-level high ; ' +
         handleResult(
           'for prod configuration npm audit reported',
           'no high-level vulnerabilities',
           'high-level vulnerabilities',
           true,
         ),
-                 //'rc=$?; if [ $rc -eq 0 ]; ' +
-                 //' then ( echo "\n* SUCCESS: npm audit reported no high-level vulnerabilities in prod configuration\n"; exit 0; )' +
-                 //' else ( echo "\n* ERROR: npm audit reported high-level vulnerabilities in prod configuration\n"; exit 1; ) ' +
-                 //'fi ',
+      //'rc=$?; if [ $rc -eq 0 ]; ' +
+      //' then ( echo "\n* SUCCESS: npm audit reported no high-level vulnerabilities in prod configuration\n"; exit 0;
+      // )' + ' else ( echo "\n* ERROR: npm audit reported high-level vulnerabilities in prod configuration\n"; exit 1;
+      // ) ' + 'fi ',
     },
-    deps: {
+    deps:  {
       update:     'echo \'* Updating packages versions... \';' +
                     ' npm-check-updates -u --upgradeAll --error-level 1 &&' +
                     ' npm install',
       updateDeps: 'nps check && nps deps.update && git commit -am \'updated deps\'"',
       check:      'ncu' +
                     ' --error-level 2' +
-                    ' --packageFile package.json', // fix for https://github.com/tjunnone/npm-check-updates/issues/136#issuecomment-155721102
+                    ' --packageFile package.json', // fix for
+                                                   // https://github.com/tjunnone/npm-check-updates/issues/136#issuecomment-155721102
     },
 
 
@@ -87,7 +88,7 @@ module.exports = {
         mocha:     'nyc ./node_modules/mocha/bin/_mocha -- -R spec ./test/**/*',
         report:    'nyc report --reporter=html && nyc report --reporter=text-lcov > coverage/coverage.lcov',
         coveralls: 'cat ./coverage/coverage.lcov | ./node_modules/coveralls/bin/coveralls.js',
-        default:   series.nps( 'test.run.test', 'test.run.report', 'test.run.coveralls'),
+        default:   series.nps('test.run.test', 'test.run.report', 'test.run.coveralls'),
       },
 
       //post: {
@@ -100,20 +101,20 @@ module.exports = {
       commit:        'git commit -am "commit by \'git.commit\'"',
       push:          'git push --follow-tags',
       commitAndPush: 'nps git.commit && nps test && nps git.push"',
-      checkClean:     'echo \'* Checking if git directory is clean... \'; ' +
-                        'bash -c \'' +
-                        '  [[ -z $(git status -uno --porcelain) ]]; ' +
-                        //'  rc=$?; if [ $rc -eq 0 ]; ' +
-                        //'    then echo "* SUCCESS: git directory is clean"; exit $rc; ' +
-                        //'    else echo "* ERROR: git directory is not clean"; exit $rc; ' +
-                        //'  fi ' +
-                        handleResult(
-                          'git directory',
-                          'is clean',
-                          'is not clean',
-                          true,
-                        ) +
-                        '\' ',
+      checkClean:    'echo \'* Checking if git directory is clean... \'; ' +
+                       'bash -c \'' +
+                       '  [[ -z $(git status -uno --porcelain) ]]; ' +
+                       //'  rc=$?; if [ $rc -eq 0 ]; ' +
+                       //'    then echo "* SUCCESS: git directory is clean"; exit $rc; ' +
+                       //'    else echo "* ERROR: git directory is not clean"; exit $rc; ' +
+                       //'  fi ' +
+                       handleResult(
+                         'git directory',
+                         'is clean',
+                         'is not clean',
+                         true,
+                       ) +
+                       '\' ',
     },
 
     publish: {
@@ -161,20 +162,20 @@ module.exports = {
     },
 
     // https://docs.travis-ci.com/user/job-lifecycle/
-    travis:             {
+    travis: {
       before_install: '',
       //install: '',
       before_script: '',
-      script:       'nps test',
+      script:        'nps test',
       //before_cache: '',
       //after_success: '',
       //after_failure: '',
       //before_deploy: '',
       //deploy: '',
       //after_deploy: '',
-      after_script:  'nps test.coveralls'
+      after_script: 'nps test.coveralls'
     },
-    dummy: 'echo "dummy"',
+    dummy:  'echo "dummy"',
   },
   options: {
     silent:   false,

@@ -31,6 +31,7 @@ console.log('* [promise-example-1] configuring');
 const send = require('../index.js')({
   user:    credentials.user,
   pass:    credentials.pass,
+  from:    'Test User Name',
   to:      credentials.user,
   subject: 'test subject',
   text:    'gmail-send promise examples',
@@ -56,7 +57,7 @@ const result = send() // Using default parameters
 
 console.log('* [promise-example-2] sending');
 
-const asyncAwaitSend = async() => {
+const asyncAwaitSend = async () => {
   try {
     const res = await send(); // Using default parameters
     console.log('* [promise-example-2] res.result:', res.result);

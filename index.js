@@ -4,8 +4,8 @@
 
 'use strict';
 
-const _ = require('lodash');
-const path = require('path');
+const _          = require('lodash');
+const path       = require('path');
 const nodemailer = require('nodemailer');
 
 /**
@@ -33,7 +33,7 @@ const nodemailer = require('nodemailer');
  * @param {sendOptions} options  - options for underlying nodemailer
  * @type {Function}
  */
-const GMailSend = function(options) {
+const GMailSend = function (options) {
   const self = this;
 
   /** @member {string} */
@@ -105,7 +105,7 @@ const GMailSend = function(options) {
         return handleError('file/filepath to attach must be set');
       }
       if (typeof file.filename === 'undefined') file.filename = path.basename(file.path);
-      if (typeof file.cid      === 'undefined') file.cid      = file.filename;
+      if (typeof file.cid === 'undefined') file.cid = file.filename;
       // we do not validate if options.files[i] is really object and has valid properties
       // add to options.attachments used by `nodemailer`
       options.attachments.push(file);
@@ -157,16 +157,18 @@ const GMailSend = function(options) {
    * @param {sendCallback} [callback]
    * @return Promise({{ result: string, full: object }})
    */
-  self.send = function(options, callback) {
+  self.send = function (options, callback) {
     if (arguments.length === 1)
       if (typeof options === 'function') { // only callback function is provided
         callback = options;
-        options = {};
+        options  = {};
       }
 
     options = options || {};
     options = _.extend({}, self.options, options);
-    if (!options.user || !options.pass) { throw new Error('options.user and options.pass are mandatory.'); }
+    if (!options.user || !options.pass) {
+      throw new Error('options.user and options.pass are mandatory.');
+    }
 
 
     if (callback) return _send(
@@ -195,6 +197,6 @@ const GMailSend = function(options) {
  * @param {sendOptions} options  - options for new GMailSend()
  * @returns {function}
  */
-module.exports = function(options) {
+module.exports = function (options) {
   return new GMailSend(options).send;
 };
