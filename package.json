@@ -25,7 +25,7 @@
   "homepage": "https://github.com/alykoshin/gmail-send",
   "dependencies": {
     "lodash": "^4.17.21",
-    "nodemailer": "^6.6.5"
+    "nodemailer": "^7.0.7"
   },
   "devDependencies": {
     "eslint": "^7.32.0",
